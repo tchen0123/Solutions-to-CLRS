@@ -20,8 +20,9 @@ struct rbtree_s {
 
 struct rbtree_s *InitRbtreeNil(void);
 struct rbtree_s *RbtreeInsert(struct rbtree_s *treeRoot, int num);
-struct rbtree_s *RbtreeDelete(struct rbtree_s *treeRoot);
+struct rbtree_s *RbtreeDelete(struct rbtree_s *treeRoot, int num);
 void TreeWalkInorder(struct rbtree_s *treeRoot);
 void TreeWalkInlevel(struct rbtree_s *treeRoot);
+void DeleteTree(struct rbtree_s *treeRoot);
 
 #endif

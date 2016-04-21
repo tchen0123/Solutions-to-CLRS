@@ -44,6 +44,14 @@ int main(void)
         TreeWalkInlevel(treeRoot);
         printf("\n\n");
 
+        for (i = 0; i < size; i++) {
+                treeRoot = RbtreeDelete(treeRoot, i + 1);
+                TreeWalkInlevel(treeRoot);
+                printf("\n\n");
+        }
+
+        DeleteTree(treeRoot);
+
         return 0;
 }
 

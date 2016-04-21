@@ -25,9 +25,14 @@ static inline struct rbtree_s *CreateNode(int num)
         return newNode;
 }
 
+static struct rbtree_s *Minimum(struct rbtree_s *treeRoot);
+static struct rbtree_s *Search(struct rbtree_s *treeRoot, int num);
 static struct rbtree_s *LeftRotate(struct rbtree_s *treeRoot, struct rbtree_s *targetPtr);
 static struct rbtree_s *RightRotate(struct rbtree_s *treeRoot, struct rbtree_s *targetPtr);
 static struct rbtree_s *RbtreeInsertFixup(struct rbtree_s *treeRoot, struct rbtree_s *targetPtr);
+static struct rbtree_s *RbtreeDeleteFixup(struct rbtree_s *treeRoot, struct rbtree_s *targetPtr);
+static struct rbtree_s *Transplant(struct rbtree_s *treeRoot, struct rbtree_s *oldPtr, struct rbtree_s *newPtr);
+static void DeleteTreeFixup(struct rbtree_s *treeRoot);
 
 /*
  * Tree walk inorder.
@@ -198,6 +203,10 @@ struct rbtree_s *InitRbtreeNil(void)
 
 void TreeWalkInlevel(struct rbtree_s *treeRoot)
 {
+        if (treeRoot == rbtreeNil_g) {
+                return;
+        }
+
         struct queue_s *queue = InitQueue();
 
         /* breadth first search */
@@ -220,4 +229,177 @@ void TreeWalkInlevel(struct rbtree_s *treeRoot)
                         EnQueue(queue, NULL); // newline
                 }
         } while (!QueueIsEmpty(queue));
+
+        /* free the queue */
+        free(queue);
+}
+
+/*
+ * Tree transplant.
+ */
+static struct rbtree_s *Transplant(struct rbtree_s *treeRoot, struct rbtree_s *oldPtr, struct rbtree_s *newPtr)
+{
+        struct rbtree_s *parent = oldPtr->parent;
+        newPtr->parent = parent;
+        if (parent == rbtreeNil_g) {
+                treeRoot = newPtr;
+        } else if (parent->left == oldPtr) {
+                parent->left = newPtr;
+        } else {
+                parent->right = newPtr;
+        }
+
+        return treeRoot;
+}
+
+static struct rbtree_s *RbtreeDeleteFixup(struct rbtree_s *treeRoot, struct rbtree_s *targetPtr)
+{
+        while (targetPtr != treeRoot && targetPtr->color == RB_BLACK) {
+                if (targetPtr == targetPtr->parent->left) {
+                        struct rbtree_s *brother = targetPtr->parent->right;
+
+                        if (brother->color == RB_RED) {
+                                brother->color = RB_BLACK;
+                                targetPtr->parent->color = RB_RED;
+
+                                treeRoot = LeftRotate(treeRoot, targetPtr->parent);
+                                brother = targetPtr->parent->right;
+                        }
+                        if (brother->left->color == RB_BLACK && brother->right->color == RB_BLACK) {
+                                brother->color = RB_RED;
+                                targetPtr = targetPtr->parent;
+                        } else {
+                                if (brother->right->color == RB_BLACK) {
+                                        brother->color = RB_RED;
+                                        brother->left->color = RB_BLACK;
+                                        treeRoot = RightRotate(treeRoot, brother);
+
+                                        brother = targetPtr->parent->right;
+                                }
+                                brother->color = targetPtr->parent->color;
+                                targetPtr->parent->color = RB_BLACK;
+                                brother->right->color = RB_BLACK;
+                                treeRoot = LeftRotate(treeRoot, targetPtr->parent);
+                                targetPtr = treeRoot;
+                        }
+                } else {
+                        struct rbtree_s *brother = targetPtr->parent->left;
+
+                        if (brother->color == RB_RED) {
+                                brother->color = RB_BLACK;
+                                targetPtr->parent->color = RB_RED;
+
+                                treeRoot = RightRotate(treeRoot, targetPtr->parent);
+                                brother = targetPtr->parent->left;
+                        }
+                        if (brother->left->color == RB_BLACK && brother->right->color == RB_BLACK) {
+                                brother->color = RB_RED;
+                                targetPtr = targetPtr->parent;
+                        } else {
+                                if (brother->left->color == RB_BLACK) {
+                                        brother->color = RB_RED;
+                                        brother->right->color = RB_BLACK;
+                                        treeRoot = LeftRotate(treeRoot, brother);
+                                        brother = targetPtr->parent->left;
+                                }
+                                brother->color = targetPtr->parent->color;
+                                targetPtr->parent->color = RB_BLACK;
+                                brother->left->color = RB_BLACK;
+                                treeRoot = RightRotate(treeRoot, targetPtr->parent);
+                                targetPtr = treeRoot;
+                        }
+                }
+        }
+        targetPtr->color = RB_BLACK;
+
+        return treeRoot;
+}
+
+struct rbtree_s *RbtreeDelete(struct rbtree_s *treeRoot, int num)
+{
+        struct rbtree_s *targetPtr = Search(treeRoot, num);
+
+        if (targetPtr == rbtreeNil_g) {
+                return treeRoot;
+        }
+
+        struct rbtree_s *yPtr, *xPtr;
+        int yColor;
+
+        yPtr = targetPtr;
+        yColor = targetPtr->color;
+        if (targetPtr->left == rbtreeNil_g) {
+                xPtr = targetPtr->right;
+                treeRoot = Transplant(treeRoot, targetPtr, targetPtr->right);
+        } else if (treeRoot->right == rbtreeNil_g) {
+                xPtr = targetPtr->left;
+                treeRoot = Transplant(treeRoot, targetPtr, targetPtr->left);
+        } else {
+                yPtr = Minimum(targetPtr->right);
+                yColor = yPtr->color;
+
+                xPtr = yPtr->right;
+                if (yPtr == targetPtr->right) {
+                        xPtr->parent = yPtr;
+                } else {
+                        treeRoot = Transplant(treeRoot, yPtr, yPtr->right);
+                        yPtr->right = targetPtr->right;
+                        yPtr->right->parent = yPtr;
+                }
+
+                treeRoot = Transplant(treeRoot, targetPtr, yPtr);
+                yPtr->left = targetPtr->left;
+                yPtr->left->parent = yPtr;
+                yPtr->color = targetPtr->color;
+        }
+        free(targetPtr);
+
+        if (yColor == RB_BLACK) {
+                treeRoot = RbtreeDeleteFixup(treeRoot, xPtr);
+        }
+
+        return treeRoot;
+}
+
+static struct rbtree_s *Search(struct rbtree_s *treeRoot, int num)
+{
+        while (treeRoot != rbtreeNil_g && treeRoot->value != num) {
+                if (treeRoot->value > num) {
+                        treeRoot = treeRoot->left;
+                } else {
+                        treeRoot = treeRoot->right;
+                }
+        }
+        return treeRoot;
+}
+
+static struct rbtree_s *Minimum(struct rbtree_s *treeRoot)
+{
+        if (treeRoot == rbtreeNil_g) {
+                return treeRoot;
+        }
+
+        while (treeRoot->left != rbtreeNil_g) {
+                treeRoot = treeRoot->left;
+        }
+        return treeRoot;
+}
+
+/*
+ * Delete the whole tree.
+ */
+void DeleteTree(struct rbtree_s *treeRoot)
+{
+        DeleteTreeFixup(treeRoot);
+
+        free(rbtreeNil_g);
+}
+
+static void DeleteTreeFixup(struct rbtree_s *treeRoot)
+{
+        if (treeRoot != NULL && treeRoot != rbtreeNil_g) {
+                DeleteTreeFixup(treeRoot->left);
+                DeleteTreeFixup(treeRoot->right);
+                free(treeRoot);
+        }
 }
