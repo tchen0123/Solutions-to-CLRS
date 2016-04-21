@@ -22,5 +22,6 @@ struct rbtree_s *InitRbtreeNil(void);
 struct rbtree_s *RbtreeInsert(struct rbtree_s *treeRoot, int num);
 struct rbtree_s *RbtreeDelete(struct rbtree_s *treeRoot);
 void TreeWalkInorder(struct rbtree_s *treeRoot);
+void TreeWalkInlevel(struct rbtree_s *treeRoot);
 
 #endif

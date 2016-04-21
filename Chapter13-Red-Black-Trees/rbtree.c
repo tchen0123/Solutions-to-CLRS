@@ -5,9 +5,9 @@
  */
 
 #include "rbtree.h"
+#include "queue.h"
 #include <stdlib.h>
 #include <stdio.h>
-
 
 static struct rbtree_s *rbtreeNil_g; // the sentinel tree nil
 
@@ -194,4 +194,30 @@ struct rbtree_s *InitRbtreeNil(void)
         rbtreeNil_g->color = RB_BLACK;
 
         return rbtreeNil_g;
+}
+
+void TreeWalkInlevel(struct rbtree_s *treeRoot)
+{
+        struct queue_s *queue = InitQueue();
+
+        /* breadth first search */
+        EnQueue(queue, treeRoot);
+        EnQueue(queue, NULL); // newline
+        do {
+                struct rbtree_s *treeNode = DeQueue(queue);
+
+                if (treeNode) {
+                        printf("%d ", treeNode->value);
+
+                        if (treeNode->left != rbtreeNil_g) {
+                                EnQueue(queue, treeNode->left);
+                        }
+                        if (treeNode->right != rbtreeNil_g) {
+                                EnQueue(queue, treeNode->right);
+                        }
+                } else if (!QueueIsEmpty(queue)) {
+                        printf("\n");
+                        EnQueue(queue, NULL); // newline
+                }
+        } while (!QueueIsEmpty(queue));
 }
