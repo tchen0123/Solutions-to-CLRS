@@ -41,6 +41,9 @@ int main(void)
         TreeWalkInorder(treeRoot);
         printf("\n\n");
 
+        TreeWalkInlevel(treeRoot);
+        printf("\n\n");
+
         return 0;
 }
 
