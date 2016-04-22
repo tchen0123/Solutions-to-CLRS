@@ -118,9 +118,9 @@ static struct bintree_s *Transplant(struct bintree_s *treeRoot, struct bintree_s
         if (parent == NULL) {
                 treeRoot = newPtr;
         } else if (parent->left == oldPtr) {
-                parent->right = newPtr;
-        } else {
                 parent->left = newPtr;
+        } else {
+                parent->right = newPtr;
         }
 
         return treeRoot;
@@ -158,6 +158,10 @@ void TreeWalkInorder(struct bintree_s *treeRoot)
  */
 void TreeWalkInlevel(struct bintree_s *treeRoot)
 {
+        if (treeRoot == NULL) {
+                return;
+        }
+
         struct queue_s *queue = InitQueue();
 
         EnQueue(queue, treeRoot);

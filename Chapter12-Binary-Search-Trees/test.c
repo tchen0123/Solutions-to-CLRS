@@ -48,7 +48,12 @@ int main(void)
         TreeWalkInlevel(treeRoot);
         printf("\n\n");
 
-        DeleteTree(treeRoot);
+        printf("Tree delete test:\n");
+        for (i = 0; i < size; i++) {
+                treeRoot = BintreeDelete(treeRoot, i);
+                TreeWalkInlevel(treeRoot);
+                printf("\n\n");
+        }
 
         return 0;
 }
