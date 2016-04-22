@@ -21,6 +21,7 @@ int main(void)
 {
         int size, i;
 
+        printf("How many integer numbers do you want to input?\n");
         scanf("%d", &size);
 
         int array[size];
@@ -30,6 +31,7 @@ int main(void)
 
         RandomizeArray(array, size);
 
+        printf("The input array is shown as follow:\n");
         struct rbtree_s *treeRoot = InitRbtreeNil();
         for (i = 0; i < size; i++) {
                 int temp = array[i];
@@ -38,12 +40,15 @@ int main(void)
         }
         printf("\n\n");
 
+        printf("Tree walk inorder:\n");
         TreeWalkInorder(treeRoot);
         printf("\n\n");
 
+        printf("Tree walk inlevel:\n");
         TreeWalkInlevel(treeRoot);
         printf("\n\n");
 
+        printf("Tree Delete test:\n");
         for (i = 0; i < size; i++) {
                 treeRoot = RbtreeDelete(treeRoot, i + 1);
                 TreeWalkInlevel(treeRoot);

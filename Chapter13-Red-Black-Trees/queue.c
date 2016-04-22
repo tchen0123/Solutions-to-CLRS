@@ -7,6 +7,9 @@
 #include "queue.h"
 #include <stdlib.h>
 
+/*
+ * Enqueue.
+ */
 void EnQueue(struct queue_s *queue, struct rbtree_s *rbtree)
 {
         struct queueNode_s *newNode = (struct queueNode_s *)malloc(sizeof(struct queueNode_s));
@@ -22,6 +25,9 @@ void EnQueue(struct queue_s *queue, struct rbtree_s *rbtree)
         queue->size++;
 }
 
+/*
+ * Dequeue.
+ */
 struct rbtree_s *DeQueue(struct queue_s *queue)
 {
         struct queueNode_s *oldFront = queue->front;
@@ -42,11 +48,17 @@ struct rbtree_s *DeQueue(struct queue_s *queue)
         }
 }
 
+/*
+ * Query whether the queue is empty.
+ */
 int QueueIsEmpty(struct queue_s *queue)
 {
         return queue->size == 0;
 }
 
+/*
+ * Initialize queue.
+ */
 struct queue_s *InitQueue(void)
 {
         struct queue_s *queue = (struct queue_s *)malloc(sizeof(struct queue_s));
@@ -54,4 +66,17 @@ struct queue_s *InitQueue(void)
         queue->size = 0;
 
         return queue;
+}
+
+/*
+ * Delete the whole queue.
+ */
+void DeleteQueue(struct queue_s *queue)
+{
+        while (queue->front != NULL) {
+                struct queueNode_s *tempPtr = queue->front;
+                queue->front = queue->front->next;
+                free(tempPtr);
+        }
+        free(queue);
 }

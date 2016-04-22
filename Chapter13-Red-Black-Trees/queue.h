@@ -25,5 +25,6 @@ void EnQueue(struct queue_s *queue, struct rbtree_s *rbtree);
 struct rbtree_s *DeQueue(struct queue_s *queue);
 int QueueIsEmpty(struct queue_s *queue);
 struct queue_s *InitQueue(void);
+void DeleteQueue(struct queue_s *queue);
 
 #endif

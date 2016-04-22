@@ -231,7 +231,8 @@ void TreeWalkInlevel(struct rbtree_s *treeRoot)
         } while (!QueueIsEmpty(queue));
 
         /* free the queue */
-        free(queue);
+        //free(queue);
+        DeleteQueue(queue);
 }
 
 /*
