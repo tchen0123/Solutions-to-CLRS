@@ -180,4 +180,18 @@ void TreeWalkInlevel(struct bintree_s *treeRoot)
                         EnQueue(queue, NULL);
                 }
         } while (!QueueIsEmpty(queue));
+
+        DeleteQueue(queue);
+}
+
+/*
+ * Delete the whole tree.
+ */
+void DeleteTree(struct bintree_s *treeRoot)
+{
+        if (treeRoot != NULL) {
+                DeleteTree(treeRoot->left);
+                DeleteTree(treeRoot->right);
+                free(treeRoot);
+        }
 }

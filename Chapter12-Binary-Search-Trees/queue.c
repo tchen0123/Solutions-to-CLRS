@@ -6,6 +6,9 @@
 
 #include "queue.h"
 
+/*
+ * Enqueue.
+ */
 void EnQueue(struct queue_s *queue, struct bintree_s *bintree)
 {
         struct queueNode_s *newNode = (struct queueNode_s *)malloc(sizeof(struct queueNode_s));
@@ -21,6 +24,9 @@ void EnQueue(struct queue_s *queue, struct bintree_s *bintree)
         queue->size++;
 }
 
+/*
+ * Dequeue.
+ */
 struct bintree_s *DeQueue(struct queue_s *queue)
 {
         if (!QueueIsEmpty(queue)) {
@@ -41,11 +47,17 @@ struct bintree_s *DeQueue(struct queue_s *queue)
         }
 }
 
+/*
+ * Query whether the queue is empty.
+ */
 int QueueIsEmpty(struct queue_s *queue)
 {
         return queue->size == 0;
 }
 
+/*
+ * Initialize the queue.
+ */
 struct queue_s *InitQueue(void)
 {
         struct queue_s *queue = (struct queue_s *)malloc(sizeof(struct queue_s));
@@ -53,4 +65,17 @@ struct queue_s *InitQueue(void)
         queue->size = 0;
 
         return queue;
+}
+
+/*
+ * Delete the whole queue.
+ */
+void DeleteQueue(struct queue_s *queue)
+{
+        while (queue->front != NULL) {
+                struct queueNode_s *tempPtr = queue->front;
+                queue->front = queue->front->next;
+                free(tempPtr);
+        }
+        free(queue);
 }
