@@ -24,6 +24,7 @@ static inline struct bintree_s *CreateNode(int num)
 
 static struct bintree_s *Transplant(struct bintree_s *treeRoot, struct bintree_s *oldPtr, struct bintree_s *newPtr);
 static struct bintree_s *Minimum(struct bintree_s *treeRoot);
+static struct bintree_s *Maximum(struct bintree_s *treeRoot);
 
 /*
  * Search a node in the binary search tree.
@@ -141,6 +142,18 @@ static struct bintree_s *Minimum(struct bintree_s *treeRoot)
         return treeRoot;
 }
 
+static struct bintree_s *Maximum(struct bintree_s *treeRoot)
+{
+        if (treeRoot == NULL) {
+                return treeRoot;
+        }
+
+        while (treeRoot->right != NULL) {
+                treeRoot = treeRoot->right;
+        }
+        return treeRoot;
+}
+
 /*
  * Tree walk inorder.
  */
@@ -198,4 +211,44 @@ void DeleteTree(struct bintree_s *treeRoot)
                 DeleteTree(treeRoot->right);
                 free(treeRoot);
         }
+}
+
+/*
+ * Search successor node.
+ */
+struct bintree_s *Successor(struct bintree_s *treeRoot)
+{
+        struct bintree_s *minPtr = Minimum(treeRoot->right);
+        if (minPtr) {
+                return minPtr;
+        }
+
+        struct bintree_s *parent, *curr;
+        parent = treeRoot->parent;
+        curr = treeRoot;
+        while (parent != NULL && curr == parent->right) {
+                curr = parent;
+                parent = curr->parent;
+        }
+        return parent;
+}
+
+/*
+ * Search the predecessor node.
+ */
+struct bintree_s *Predecessor(struct bintree_s *treeRoot)
+{
+        struct bintree_s *maxPtr = Maximum(treeRoot->left);
+        if (maxPtr) {
+                return maxPtr;
+        }
+
+        struct bintree_s *parent, *curr;
+        parent = treeRoot->parent;
+        curr = treeRoot;
+        while (parent != NULL && curr == parent->left) {
+                curr = parent;
+                parent = curr->parent;
+        }
+        return parent;
 }
