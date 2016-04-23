@@ -21,7 +21,6 @@ static inline void Swap(int *a, int *b)
 }
 
 static void RandomizeArray(int array[], int size);
-static char *CreateString(void);
 
 int main(void)
 {
@@ -39,9 +38,8 @@ int main(void)
         printf("The input array is shown as follows:\n");
         struct bintree_s *binTree = NULL;
         for (i = 0; i < size; i++) {
-                int temp = array[i];
-                printf("%d ", temp);
-                binTree = BintreeInsert(binTree, temp);
+                printf("%d ", array[i]);
+                binTree = BintreeInsert(binTree, array[i]);
         }
         printf("\n\n");
 
@@ -63,14 +61,13 @@ int main(void)
         printf("Radix tree test:\n");
         struct radixTree_s *radixTree = InitRadixTree();
         for (i = 0; i < size; i++) {
-                char *str = CreateString();
-
-                RadixTreeInsert(radixTree, str);
+                RadixTreeInsert(radixTree, array[i]);
         }
         RadixTreeWalk(radixTree);
         printf("\n\n");
 
         return 0;
+
 }
 
 /*
@@ -83,22 +80,4 @@ static void RandomizeArray(int array[], int size)
                 int tempIndex = rand() % i;
                 Swap(&array[i], &array[tempIndex]);
         }
-}
-
-/*
- * Create a string randomly.
- */
-static char *CreateString(void)
-{
-        int i, len;
-
-        char *str = (char *)malloc(sizeof(char) * (STR_SIZE + 1));
-        memset(str, 0, sizeof(char) * (STR_SIZE + 1));
-
-        len = rand() % STR_SIZE + 1;
-        for (i = 0; i < len; i++) {
-                str[i] = rand() % 26 + 'a';
-        }
-
-        return str;
 }
