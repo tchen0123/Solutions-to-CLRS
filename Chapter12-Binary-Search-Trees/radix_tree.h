@@ -4,6 +4,12 @@
  * Copyright (c) 2016  Jiawei Feng
  */
 
+/*
+ * This code is the simple operation about radix tree.
+ * In this routine, each radix tree node has four children node allocated by binary digits 00, 01, 10, 11.
+ */
+
+
 #ifndef __RADIX_TREE_H_
 #define __RADIX_TREE_H_
 
