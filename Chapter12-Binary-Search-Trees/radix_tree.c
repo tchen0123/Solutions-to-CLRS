@@ -7,6 +7,7 @@
 /*
  * This code is the simple operation about radix tree.
  * In this routine, each radix tree node has four children node allocated by binary digits 00, 01, 10, 11.
+ * The radix tree is used to stored unsigned integer numbers.
  */
 
 #include "radix_tree.h"
