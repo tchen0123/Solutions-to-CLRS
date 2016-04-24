@@ -26,8 +26,8 @@ int main(void)
 {
         int size, i, select;
 
-        printf("1.Binary search tree test");
-        printf("2.Radix tree test:");
+        printf("1.Binary search tree test\n");
+        printf("2.Radix tree test\n");
         printf("Please enter your choice: ");
         scanf("%d", &select);
 
