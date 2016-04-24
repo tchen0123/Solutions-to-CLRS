@@ -39,7 +39,7 @@ void Push(struct stack_s *stack, int num)
 
                         stack->top = stack->top->next;
                 } else {
-                        stack->head = stack->top = newNode;
+                        stack->top = newNode;
                 }
 
                 stack->size++;
@@ -62,7 +62,7 @@ int Pop(struct stack_s *stack)
                         stack->top = tempPtr;
                 } else {
                         free(stack->top);
-                        stack->top = stack->head = NULL;
+                        stack->top = NULL;
                 }
                 stack->size--;
 
@@ -97,7 +97,7 @@ struct stack_s *InitStack(int capacity)
         struct stack_s *stack = (struct stack_s *)malloc(sizeof(struct stack_s));
         stack->capacity = capacity;
         stack->size = 0;
-        stack->head = stack->top = NULL;
+        stack->top = NULL;
 
         return stack;
 }
@@ -119,9 +119,9 @@ void StackWalk(struct stack_s *stack)
  */
 void DeleteStack(struct stack_s *stack)
 {
-        while (stack->head != NULL) {
-                struct stackNode_s *tempPtr = stack->head;
-                stack->head = stack->head->next;
+        while (stack->top != NULL) {
+                struct stackNode_s *tempPtr = stack->top;
+                stack->top = stack->top->prev;
                 free(tempPtr);
         }
 

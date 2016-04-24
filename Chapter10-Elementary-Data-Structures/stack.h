@@ -20,7 +20,6 @@ struct stackNode_s {
 };
 
 struct stack_s {
-        struct stackNode_s *head;
         struct stackNode_s *top;
         size_t size;
         size_t capacity;
