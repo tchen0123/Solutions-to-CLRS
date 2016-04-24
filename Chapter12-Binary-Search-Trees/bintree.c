@@ -6,6 +6,7 @@
 
 #include "bintree.h"
 #include "queue.h"
+#include "stack.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -159,10 +160,29 @@ static struct bintree_s *Maximum(struct bintree_s *treeRoot)
  */
 void TreeWalkInorder(struct bintree_s *treeRoot)
 {
+        /*
         if (treeRoot != NULL) {
                 TreeWalkInorder(treeRoot->left);
                 printf("%d ", treeRoot->value);
                 TreeWalkInorder(treeRoot->right);
+        }
+        */
+
+        struct bintree_s *tempPtr = treeRoot;
+        struct stack_s *stack = InitStack();
+
+        while (tempPtr || !StackIsEmpty(stack)) {
+                if (tempPtr) {
+                        printf("%d ", tempPtr->value);
+
+                        Push(stack, tempPtr);
+
+                        tempPtr = tempPtr->left;
+                } else {
+                        tempPtr = Pop(stack);
+
+                        tempPtr = tempPtr->right;
+                }
         }
 }
 
