@@ -16,7 +16,7 @@
 /*
  * Initialize queue.
  */
-struct queue_s *InitQueue(int capacity)
+struct queue_s *InitQueue(size_t capacity)
 {
         struct queue_s *queue = (struct queue_s *)malloc(sizeof(struct queue_s));
         queue->capacity = capacity;

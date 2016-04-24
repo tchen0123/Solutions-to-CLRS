@@ -18,11 +18,11 @@ struct queue_s {
         int *array;
         int head;
         int tail;
-        int size;
-        int capacity;
+        size_t size;
+        size_t capacity;
 };
 
-struct queue_s *InitQueue(int capacity);
+struct queue_s *InitQueue(size_t capacity);
 void EnQueue(struct queue_s *queue, int num);
 int DeQueue(struct queue_s *queue);
 int QueueIsEmpty(struct queue_s *queue);
