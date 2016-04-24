@@ -6,6 +6,7 @@
 
 #include "list.h"
 #include "stack.h"
+#include "queue.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -45,8 +46,11 @@ int main(void)
 
         struct list_s *listHead = NULL;
 
-        /* the initial stack capacity is 10 */
-        struct stack_s *stack = InitStack(10);
+        /* Initial stack capacity is 10 */
+        //struct stack_s *stack = InitStack(10);
+
+        /* Initial queue capacity is 10 */
+        struct queue_s *queue = InitQueue(10);
 
         switch (select) {
         case 1:
@@ -66,6 +70,7 @@ int main(void)
                 DeleteList(listHead);
                 break;
         case 2:
+                /*
                 for (i = 0; i < size; i++) {
                         Push(stack, array[i]);
                 }
@@ -81,7 +86,35 @@ int main(void)
                 printf("\n\n");
 
                 DeleteStack(stack);
+                break;
+                */
+        case 3:
+                for (i = 0; i < size; i++) {
+                        EnQueue(queue, array[i]);
+                }
+
+                printf("\nQueue walk:\n");
+                QueueWalk(queue);
+                printf("\n\n");
+
+                printf("Dequeue test:\n");
+                for (i = 0; i < size / 2; i++) {
+                        printf("Dequeue:%d\n", DeQueue(queue));
+                }
+                printf("\n\n");
+
+                printf("Enqueue test:\n");
+                for (i = 0; i < size; i++) {
+                        EnQueue(queue, array[i]);
+                        printf("Enqueue:%d\n", array[i]);
+                        QueueWalk(queue);
+                        printf("\n\n");
+                }
+
+                DeleteQueue(queue);
+                break;
         }
+
         return 0;
 }
 
