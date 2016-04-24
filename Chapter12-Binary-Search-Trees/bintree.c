@@ -204,11 +204,11 @@ void TreeWalkInlevel(struct bintree_s *treeRoot)
 /*
  * Delete the whole tree.
  */
-void DeleteTree(struct bintree_s *treeRoot)
+void DeleteBinTree(struct bintree_s *treeRoot)
 {
         if (treeRoot != NULL) {
-                DeleteTree(treeRoot->left);
-                DeleteTree(treeRoot->right);
+                DeleteBinTree(treeRoot->left);
+                DeleteBinTree(treeRoot->right);
                 free(treeRoot);
         }
 }
@@ -284,7 +284,7 @@ void BintreeInvert(struct bintree_s *treeRoot)
                 }
         } while (!QueueIsEmpty(queue));
 
-        DeQueue(queue);
+        DeleteQueue(queue);
 
         TreeWalkInlevel(treeRoot);
 }
