@@ -22,5 +22,6 @@ struct bintree_s *Predecessor(struct bintree_s *treeRoot);
 void TreeWalkInorder(struct bintree_s *treeRoot);
 void TreeWalkInlevel(struct bintree_s *treeRoot);
 void DeleteTree(struct bintree_s *treeRoot);
+void BintreeInvert(struct bintree_s *treeRoot);
 
 #endif

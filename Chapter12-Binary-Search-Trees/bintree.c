@@ -252,3 +252,39 @@ struct bintree_s *Predecessor(struct bintree_s *treeRoot)
         }
         return parent;
 }
+
+/*
+ * Invert the binary search tree, and output its mirror.
+ * Using queue!
+ */
+void BintreeInvert(struct bintree_s *treeRoot)
+{
+        struct queue_s *queue = InitQueue();
+        EnQueue(queue, treeRoot);
+
+        do {
+                struct bintree_s *treePtr = DeQueue(queue);
+
+                /* Invert */
+                struct bintree_s *tempPtr = treePtr->left;
+                treePtr->left = treePtr->right;
+                if (treePtr->left) {
+                        treePtr->left->parent = treePtr;
+                }
+                treePtr->right = tempPtr;
+                if (treePtr->right) {
+                        treePtr->right->parent = treePtr;
+                }
+
+                if (treePtr->left) {
+                        EnQueue(queue, treePtr->left);
+                }
+                if (treePtr->right) {
+                        EnQueue(queue, treePtr->right);
+                }
+        } while (!QueueIsEmpty(queue));
+
+        DeQueue(queue);
+
+        TreeWalkInlevel(treeRoot);
+}

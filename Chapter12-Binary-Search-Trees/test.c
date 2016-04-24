@@ -51,6 +51,10 @@ int main(void)
         TreeWalkInlevel(binTree);
         printf("\n\n");
 
+        BintreeInvert(binTree);
+        printf("\n\n");
+
+        /*
         printf("Tree delete test:\n");
         for (i = 0; i < size; i++) {
                 binTree = BintreeDelete(binTree, i);
@@ -65,6 +69,7 @@ int main(void)
         }
         RadixTreeWalk(radixTree);
         printf("\n\n");
+        */
 
         return 0;
 
