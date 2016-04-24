@@ -44,8 +44,11 @@ int main(void)
         printf("\n\n");
 
         printf("List invert:\n");
-        ListInvert(listHead);
+        listHead = ListInvert(listHead);
+        ListWalk(listHead);
         printf("\n\n");
+
+        DeleteList(listHead);
 
         return 0;
 }

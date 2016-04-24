@@ -58,7 +58,9 @@ struct list_s *ListDelete(struct list_s *listHead, int num)
                         }
                 } else {
                         listHead = listHead->next;
-                        listHead->prev = NULL;
+                        if (listHead) {
+                                listHead->prev = NULL;
+                        }
                 }
                 free(targetPtr);
         }
@@ -92,8 +94,13 @@ void ListWalk(struct list_s *listHead)
 /*
  * Invert the list.
  */
-void ListInvert(struct list_s *listHead)
+struct list_s *ListInvert(struct list_s *listHead)
 {
+        if (listHead == NULL) {
+                return NULL;
+        }
+
+        /* set a sentinel to store the list head */
         struct list_s *sentinelHead = (struct list_s *)malloc(sizeof(struct list_s));
         sentinelHead->next = listHead;
 
@@ -113,5 +120,19 @@ void ListInvert(struct list_s *listHead)
         listHead = sentinelHead->next;
         listHead->prev = NULL;
 
-        ListWalk(listHead);
+        free(sentinelHead);
+
+        return listHead;
+}
+
+/*
+ * Delete the whole list.
+ */
+void DeleteList(struct list_s *listHead)
+{
+        while (listHead != NULL) {
+                struct list_s *tempPtr = listHead;
+                listHead = listHead->next;
+                free(tempPtr);
+        }
 }

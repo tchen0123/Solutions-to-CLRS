@@ -20,6 +20,7 @@ struct list_s *ListInsert(struct list_s *listHead, int num);
 struct list_s *ListDelete(struct list_s *listHead, int num);
 struct list_s *ListSearch(struct list_s *listHead, int num);
 void ListWalk(struct list_s *listHead);
-void ListInvert(struct list_s *listHead);
+struct list_s *ListInvert(struct list_s *listHead);
+void DeleteList(struct list_s *listHead);
 
 #endif
