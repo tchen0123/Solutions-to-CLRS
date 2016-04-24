@@ -24,6 +24,7 @@ struct radixTree_s {
 
 void RadixTreeInsert(struct radixTree_s *treeRoot, unsigned int value);
 void RadixTreeWalk(struct radixTree_s *treeRoot);
+void DeleteRadixTree(struct radixTree_s *treeRoot);
 struct radixTree_s *InitRadixTree(void);
 
 #endif

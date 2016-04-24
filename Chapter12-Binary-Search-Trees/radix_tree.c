@@ -81,3 +81,17 @@ struct radixTree_s *InitRadixTree(void)
 
         return treeRoot;
 }
+
+/*
+ * Delete the whole radix tree.
+ */
+void DeleteRadixTree(struct radixTree_s *treeRoot)
+{
+        if (treeRoot != NULL) {
+                int i;
+                for (i = 0; i < CHILD_NUM; i++) {
+                        DeleteRadixTree(treeRoot->child[i]);
+                }
+                free(treeRoot);
+        }
+}
