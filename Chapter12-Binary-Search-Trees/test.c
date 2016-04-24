@@ -24,7 +24,12 @@ static void RandomizeArray(int array[], int size);
 
 int main(void)
 {
-        int size, i;
+        int size, i, select;
+
+        printf("1.Binary search tree test");
+        printf("2.Radix tree test:");
+        printf("Please enter your choice: ");
+        scanf("%d", &select);
 
         printf("How many integer numbers do you want to input?\n");
         scanf("%d", &size);
@@ -39,37 +44,45 @@ int main(void)
         struct bintree_s *binTree = NULL;
         for (i = 0; i < size; i++) {
                 printf("%d ", array[i]);
-                binTree = BintreeInsert(binTree, array[i]);
         }
         printf("\n\n");
 
-        printf("Tree walk inorder:\n");
-        TreeWalkInorder(binTree);
-        printf("\n\n");
+        switch (select) {
+        case 1:
+                for (i = 0; i < size; i++) {
+                        binTree = BintreeInsert(binTree, array[i]);
+                }
 
-        printf("Tree walk inlevel:\n");
-        TreeWalkInlevel(binTree);
-        printf("\n\n");
+                printf("Tree walk inorder:\n");
+                TreeWalkInorder(binTree);
+                printf("\n\n");
 
-        BintreeInvert(binTree);
-        printf("\n\n");
-
-        /*
-        printf("Tree delete test:\n");
-        for (i = 0; i < size; i++) {
-                binTree = BintreeDelete(binTree, i);
+                printf("Tree walk inlevel:\n");
                 TreeWalkInlevel(binTree);
                 printf("\n\n");
-        }
 
-        printf("Radix tree test:\n");
-        struct radixTree_s *radixTree = InitRadixTree();
-        for (i = 0; i < size; i++) {
-                RadixTreeInsert(radixTree, array[i]);
+                BintreeInvert(binTree);
+                printf("\n\n");
+
+                printf("Tree delete test:\n");
+                for (i = 0; i < size; i++) {
+                        binTree = BintreeDelete(binTree, i);
+                        TreeWalkInlevel(binTree);
+                        printf("\n\n");
+                }
+                DeleteBinTree(binTree);
+                break;
+        case 2:
+                printf("Radix tree test:\n");
+                struct radixTree_s *radixTree = InitRadixTree();
+                for (i = 0; i < size; i++) {
+                        RadixTreeInsert(radixTree, array[i]);
+                }
+                RadixTreeWalk(radixTree);
+                printf("\n\n");
+                DeleteRadixTree(radixTree);
+                break;
         }
-        RadixTreeWalk(radixTree);
-        printf("\n\n");
-        */
 
         return 0;
 
