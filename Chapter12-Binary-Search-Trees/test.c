@@ -61,6 +61,10 @@ int main(void)
                 TreeWalkPreorder(binTree);
                 printf("\n\n");
 
+                printf("Tree walk postorder:\n");
+                TreeWalkPostorder(binTree);
+                printf("\n\n");
+
                 printf("Tree walk inlevel:\n");
                 TreeWalkInlevel(binTree);
                 printf("\n\n");

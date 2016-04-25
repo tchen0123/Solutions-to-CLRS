@@ -7,39 +7,46 @@
 #include "queue.h"
 
 /*
- * Enqueue.
+ * Initialize queue.
  */
+struct queue_s *InitQueue(void)
+{
+        struct queue_s *queue = (struct queue_s *)malloc(sizeof(struct queue_s));
+        queue->head = queue->tail = NULL;
+        queue->size = 0;
+
+        return queue;
+}
+
 void EnQueue(struct queue_s *queue, struct bintree_s *bintree)
 {
         struct queueNode_s *newNode = (struct queueNode_s *)malloc(sizeof(struct queueNode_s));
         newNode->bintree = bintree;
-        newNode->next = NULL;
+        newNode->prev = newNode->next = NULL;
 
         if (!QueueIsEmpty(queue)) {
-                queue->rear->next = newNode;
-                queue->rear = queue->rear->next;
+                queue->tail->next = newNode;
+                newNode->prev = queue->tail;
+                queue->tail = newNode;
         } else {
-                queue->front = queue->rear = newNode;
+                queue->head = queue->tail = newNode;
         }
         queue->size++;
 }
 
-/*
- * Dequeue.
- */
 struct bintree_s *DeQueue(struct queue_s *queue)
 {
         if (!QueueIsEmpty(queue)) {
-                struct queueNode_s *oldFront = queue->front;
-                struct bintree_s *retPtr = oldFront->bintree;
+                struct queueNode_s *oldHead = queue->head;
+                struct bintree_s *retPtr = oldHead->bintree;
 
                 if (queue->size != 1) {
-                        queue->front = queue->front->next;
+                        queue->head = queue->head->next;
                 } else {
-                        queue->front = queue->rear = NULL;
+                        queue->head = queue->tail = NULL;
                 }
-                free(oldFront);
                 queue->size--;
+                free(oldHead);
 
                 return retPtr;
         } else {
@@ -48,7 +55,7 @@ struct bintree_s *DeQueue(struct queue_s *queue)
 }
 
 /*
- * Query whether the queue is empty.
+ * Query whether queue is empty.
  */
 int QueueIsEmpty(struct queue_s *queue)
 {
@@ -56,25 +63,13 @@ int QueueIsEmpty(struct queue_s *queue)
 }
 
 /*
- * Initialize the queue.
- */
-struct queue_s *InitQueue(void)
-{
-        struct queue_s *queue = (struct queue_s *)malloc(sizeof(struct queue_s));
-        queue->front = queue->rear = NULL;
-        queue->size = 0;
-
-        return queue;
-}
-
-/*
  * Delete the whole queue.
  */
 void DeleteQueue(struct queue_s *queue)
 {
-        while (queue->front != NULL) {
-                struct queueNode_s *tempPtr = queue->front;
-                queue->front = queue->front->next;
+        while (queue->head != NULL) {
+                struct queueNode_s *tempPtr = queue->head;
+                queue->head = queue->head->next;
                 free(tempPtr);
         }
         free(queue);

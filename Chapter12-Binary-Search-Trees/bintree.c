@@ -6,9 +6,10 @@
 
 #include "bintree.h"
 #include "queue.h"
-#include "pre_tree_walk.h"
+#include "stack.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 /*
  * Create a new node.
@@ -156,96 +157,6 @@ static struct bintree_s *Maximum(struct bintree_s *treeRoot)
 }
 
 /*
- * Tree walk inorder.
- */
-void TreeWalkInorder(struct bintree_s *treeRoot)
-{
-        struct bintree_s *treeNode = treeRoot;
-        struct preWalk_s *stack = InitPreWalk();
-
-        /* Depth first search */
-        while (treeNode || !PreWalkIsEmpty(stack)) {
-                if (treeNode) {
-                        PreWalkPush(stack, treeNode);
-
-                        treeNode = treeNode->left;
-                } else {
-                        treeNode = PreWalkPop(stack);
-
-                        printf("%d ", treeNode->value);
-
-                        treeNode = treeNode->right;
-                }
-        }
-        DeletePreWalk(stack);
-}
-
-/*
- * Tree walk preorder.
- */
-void TreeWalkPreorder(struct bintree_s *treeRoot)
-{
-        struct bintree_s *treeNode = treeRoot;
-        struct preWalk_s *stack = InitPreWalk();
-
-        /* Depth first search */
-        while (treeNode || !PreWalkIsEmpty(stack)) {
-                if (treeNode) {
-                        printf("%d ", treeNode->value);
-
-                        PreWalkPush(stack, treeNode);
-
-                        treeNode = treeNode->left;
-                } else {
-                        treeNode = PreWalkPop(stack);
-
-                        treeNode = treeNode->right;
-                }
-        }
-        DeletePreWalk(stack);
-
-}
-
-void TreeWalkPostorder(struct bintree_s *treeRoot)
-{
-}
-
-/*
- * Tree walk inlevel.
- */
-void TreeWalkInlevel(struct bintree_s *treeRoot)
-{
-        if (treeRoot == NULL) {
-                return;
-        }
-
-        struct queue_s *queue = InitQueue();
-
-        EnQueue(queue, treeRoot);
-        EnQueue(queue, NULL);
-        do {
-                struct bintree_s *treePtr = DeQueue(queue);
-
-                if (treePtr) {
-                        printf("%d ", treePtr->value);
-
-                        if (treePtr->left) {
-                                EnQueue(queue, treePtr->left);
-                        }
-                        if (treePtr->right) {
-                                EnQueue(queue, treePtr->right);
-                        }
-                } else if (!QueueIsEmpty(queue)) {
-                        printf("\n");
-
-                        EnQueue(queue, NULL);
-                }
-        } while (!QueueIsEmpty(queue));
-
-        DeleteQueue(queue);
-}
-
-/*
  * Delete the whole tree.
  */
 void DeleteBinTree(struct bintree_s *treeRoot)
@@ -331,4 +242,118 @@ void BintreeInvert(struct bintree_s *treeRoot)
         DeleteQueue(queue);
 
         TreeWalkInlevel(treeRoot);
+}
+
+/*
+ * Tree walk inlevel.
+ */
+void TreeWalkInlevel(struct bintree_s *treeRoot)
+{
+        struct bintree_s *treePtr = treeRoot;
+        struct queue_s *queue = InitQueue();
+
+        /* Breadth firsh search */
+        EnQueue(queue, treePtr);
+        EnQueue(queue, NULL); // newline flag
+        do {
+                treePtr = DeQueue(queue);
+
+                if (treePtr) {
+                        printf("%d ", treePtr->value);
+
+                        if (treePtr->left) {
+                                EnQueue(queue, treePtr->left);
+                        }
+                        if (treePtr->right) {
+                                EnQueue(queue, treePtr->right);
+                        }
+                } else if (!QueueIsEmpty(queue)) { // newline
+                        printf("\n");
+                        EnQueue(queue, NULL);
+                }
+        } while (!QueueIsEmpty(queue));
+
+        DeleteQueue(queue);
+}
+
+/*
+ * Tree walk inorder
+ */
+void TreeWalkInorder(struct bintree_s *treeRoot)
+{
+        struct bintree_s *treePtr = treeRoot;
+        struct preWalk_s *stack = InitPreWalk();
+
+        /* Depth first search */
+        while (treePtr || !PreWalkIsEmpty(stack)) {
+                if (treePtr) {
+                        PreWalkPush(stack, treePtr);
+
+                        treePtr = treePtr->left;
+                } else {
+                        treePtr = PreWalkPop(stack);
+
+                        printf("%d ", treePtr->value);
+
+                        treePtr = treePtr->right;
+                }
+        }
+
+        DeletePreWalk(stack);
+}
+
+/*
+ * Tree walk preorder.
+ */
+void TreeWalkPreorder(struct bintree_s *treeRoot)
+{
+        struct bintree_s *treePtr = treeRoot;
+        struct preWalk_s *stack = InitPreWalk();
+
+        /* Depth first search */
+        while (treePtr || !PreWalkIsEmpty(stack)) {
+                if (treePtr) {
+                        printf("%d ", treePtr->value);
+
+                        PreWalkPush(stack, treePtr);
+                        treePtr = treePtr->left;
+                } else {
+                        treePtr = PreWalkPop(stack);
+
+                        treePtr = treePtr->right;
+                }
+        }
+        DeletePreWalk(stack);
+}
+
+/*
+ * Tree walk postorder.
+ *
+ * Postorder walk is different from inorder and preorder walk.
+ */
+void TreeWalkPostorder(struct bintree_s *treeRoot)
+{
+        struct bintree_s *treePtr = treeRoot;
+        struct postWalk_s *stack = InitPostWalk();
+
+        /* Depth first search */
+        while (treePtr || !PostWalkIsEmpty(stack)) {
+                if (treePtr) {
+                        PostWalkPush(stack, treePtr, true);
+                        treePtr = treePtr->left;
+                } else {
+                        struct postWalkNode_s *stackNode = PostWalkPop(stack);
+                        treePtr = stackNode->bintree;
+
+                        if (stackNode->isFirst) {
+                                PostWalkPush(stack, stackNode->bintree, false);
+                                treePtr = treePtr->right;
+                        } else {
+                                printf("%d ", treePtr->value);
+                                treePtr = NULL;
+                        }
+                        free(stackNode);
+                }
+        }
+        DeletePostWalk(stack);
 }

@@ -12,19 +12,18 @@
 
 struct queueNode_s {
         struct bintree_s *bintree;
-        struct queueNode_s *next;
+        struct queueNode_s *prev, *next;
 };
 
 struct queue_s {
-        struct queueNode_s *front;
-        struct queueNode_s *rear;
+        struct queueNode_s *head, *tail;
         size_t size;
 };
 
+struct queue_s *InitQueue(void);
 void EnQueue(struct queue_s *queue, struct bintree_s *bintree);
 struct bintree_s *DeQueue(struct queue_s *queue);
 int QueueIsEmpty(struct queue_s *queue);
-struct queue_s *InitQueue(void);
 void DeleteQueue(struct queue_s *queue);
 
 #endif
