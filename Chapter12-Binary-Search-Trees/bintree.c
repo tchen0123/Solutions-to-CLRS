@@ -6,7 +6,7 @@
 
 #include "bintree.h"
 #include "queue.h"
-#include "stack.h"
+#include "pre_tree_walk.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -161,22 +161,22 @@ static struct bintree_s *Maximum(struct bintree_s *treeRoot)
 void TreeWalkInorder(struct bintree_s *treeRoot)
 {
         struct bintree_s *treeNode = treeRoot;
-        struct stack_s *stack = InitStack();
+        struct preWalk_s *stack = InitPreWalk();
 
-        while (treeNode || !StackIsEmpty(stack)) {
+        while (treeNode || !PreWalkIsEmpty(stack)) {
                 if (treeNode) {
-                        Push(stack, treeNode);
+                        PreWalkPush(stack, treeNode);
 
                         treeNode = treeNode->left;
                 } else {
-                        treeNode = Pop(stack);
+                        treeNode = PreWalkPop(stack);
 
                         printf("%d ", treeNode->value);
 
                         treeNode = treeNode->right;
                 }
         }
-        DeleteStack(stack);
+        DeletePreWalk(stack);
 }
 
 /*
@@ -185,23 +185,27 @@ void TreeWalkInorder(struct bintree_s *treeRoot)
 void TreeWalkPreorder(struct bintree_s *treeRoot)
 {
         struct bintree_s *treeNode = treeRoot;
-        struct stack_s *stack = InitStack();
+        struct preWalk_s *stack = InitPreWalk();
 
-        while (treeNode || !StackIsEmpty(stack)) {
+        while (treeNode || !PreWalkIsEmpty(stack)) {
                 if (treeNode) {
                         printf("%d ", treeNode->value);
 
-                        Push(stack, treeNode);
+                        PreWalkPush(stack, treeNode);
 
                         treeNode = treeNode->left;
                 } else {
-                        treeNode = Pop(stack);
+                        treeNode = PreWalkPop(stack);
 
                         treeNode = treeNode->right;
                 }
         }
-        DeleteStack(stack);
+        DeletePreWalk(stack);
 
+}
+
+void TreeWalkPostorder(struct bintree_s *treeRoot)
+{
 }
 
 /*
