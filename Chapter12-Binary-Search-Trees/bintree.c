@@ -163,6 +163,7 @@ void TreeWalkInorder(struct bintree_s *treeRoot)
         struct bintree_s *treeNode = treeRoot;
         struct preWalk_s *stack = InitPreWalk();
 
+        /* Depth first search */
         while (treeNode || !PreWalkIsEmpty(stack)) {
                 if (treeNode) {
                         PreWalkPush(stack, treeNode);
@@ -187,6 +188,7 @@ void TreeWalkPreorder(struct bintree_s *treeRoot)
         struct bintree_s *treeNode = treeRoot;
         struct preWalk_s *stack = InitPreWalk();
 
+        /* Depth first search */
         while (treeNode || !PreWalkIsEmpty(stack)) {
                 if (treeNode) {
                         printf("%d ", treeNode->value);
