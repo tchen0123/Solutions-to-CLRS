@@ -160,30 +160,48 @@ static struct bintree_s *Maximum(struct bintree_s *treeRoot)
  */
 void TreeWalkInorder(struct bintree_s *treeRoot)
 {
-        /*
-        if (treeRoot != NULL) {
-                TreeWalkInorder(treeRoot->left);
-                printf("%d ", treeRoot->value);
-                TreeWalkInorder(treeRoot->right);
-        }
-        */
-
-        struct bintree_s *tempPtr = treeRoot;
+        struct bintree_s *treeNode = treeRoot;
         struct stack_s *stack = InitStack();
 
-        while (tempPtr || !StackIsEmpty(stack)) {
-                if (tempPtr) {
-                        printf("%d ", tempPtr->value);
+        while (treeNode || !StackIsEmpty(stack)) {
+                if (treeNode) {
+                        Push(stack, treeNode);
 
-                        Push(stack, tempPtr);
-
-                        tempPtr = tempPtr->left;
+                        treeNode = treeNode->left;
                 } else {
-                        tempPtr = Pop(stack);
+                        treeNode = Pop(stack);
 
-                        tempPtr = tempPtr->right;
+                        printf("%d ", treeNode->value);
+
+                        treeNode = treeNode->right;
                 }
         }
+        DeleteStack(stack);
+}
+
+/*
+ * Tree walk preorder.
+ */
+void TreeWalkPreorder(struct bintree_s *treeRoot)
+{
+        struct bintree_s *treeNode = treeRoot;
+        struct stack_s *stack = InitStack();
+
+        while (treeNode || !StackIsEmpty(stack)) {
+                if (treeNode) {
+                        printf("%d ", treeNode->value);
+
+                        Push(stack, treeNode);
+
+                        treeNode = treeNode->left;
+                } else {
+                        treeNode = Pop(stack);
+
+                        treeNode = treeNode->right;
+                }
+        }
+        DeleteStack(stack);
+
 }
 
 /*

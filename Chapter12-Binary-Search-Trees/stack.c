@@ -74,3 +74,20 @@ int StackIsEmpty(struct stack_s *stack)
 {
         return stack->size == 0;
 }
+
+/*
+ * Delete the whole stack.
+ */
+void DeleteStack(struct stack_s *stack)
+{
+        int i, size;
+
+        size = stack->size;
+        for (i = 0; i < size; i++) {
+                struct stackNode_s *tempPtr = stack->top;
+                stack->top = stack->top->prev;
+                free(tempPtr);
+        }
+
+        free(stack);
+}

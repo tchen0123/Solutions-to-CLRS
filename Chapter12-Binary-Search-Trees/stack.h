@@ -25,5 +25,6 @@ struct stack_s *InitStack(void);
 void Push(struct stack_s *stack, struct bintree_s *bintree);
 struct bintree_s *Pop(struct stack_s *stack);
 int StackIsEmpty(struct stack_s *stack);
+void DeleteStack(struct stack_s *stack);
 
 #endif

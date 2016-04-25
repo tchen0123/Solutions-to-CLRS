@@ -20,6 +20,7 @@ struct bintree_s *BintreeDelete(struct bintree_s *treeRoot, int num);
 struct bintree_s *Successor(struct bintree_s *treeRoot);
 struct bintree_s *Predecessor(struct bintree_s *treeRoot);
 void TreeWalkInorder(struct bintree_s *treeRoot);
+void TreeWalkPreorder(struct bintree_s *treeRoot);
 void TreeWalkInlevel(struct bintree_s *treeRoot);
 void DeleteBinTree(struct bintree_s *treeRoot);
 void BintreeInvert(struct bintree_s *treeRoot);
