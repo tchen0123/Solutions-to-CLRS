@@ -43,7 +43,7 @@ static void Merge(int array[], int head, int tail, int midd)
                 if (left[i] < right[j]) {
                         array[k] = left[i];
 
-                        /* If left array arrives the end */
+                        // If left array arrives the end
                         if (++i == leftLen) {
                                 k++;
                                 for (; k <= tail; k++) {
@@ -55,7 +55,7 @@ static void Merge(int array[], int head, int tail, int midd)
                 } else {
                         array[k] = right[j];
 
-                        /* If right array arrives the end */
+                        // If right array arrives the end
                         if (++j == rightLen) {
                                 k++;
                                 for (; k <= tail; k++) {

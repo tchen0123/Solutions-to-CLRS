@@ -6,6 +6,7 @@
 
 #include "insertion_sort.h"
 #include "merge_sort.h"
+#include "bubble_sort.h"
 #include "binary_sum.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,6 +28,7 @@ int main(void)
         printf("1.Insertion sort test\n");
         printf("2.Binary numbers sum test\n");
         printf("3.Merge sort test\n");
+        printf("4.Bubble sort test\n");
         printf("Please enter your choice:\n");
         scanf("%d", &select);
 
@@ -59,11 +61,11 @@ int main(void)
                 printf("\n\n");
                 break;
         case 2:
-                /* Create binary number array */
+                // Create binary number array
                 CreateBinary(binaryA, size);
                 CreateBinary(binaryB, size);
 
-                /* Binary sum */
+                // Binary sum
                 BinarySum(binaryA, binaryB, size, binarySum);
 
                 printf(" ");
@@ -98,13 +100,33 @@ int main(void)
 
                 MergeSort(array, 0, size - 1);
 
-                printf("The array sorted:\n");
+                printf("The sorted array:\n");
                 for (i = 0; i < size; i++) {
                         printf("%d ", array[i]);
                 }
                 printf("\n\n");
                 break;
+        case 4:
+                for (i = 0; i < size; i++) {
+                        array[i] = i + 1;
+                }
 
+                RandomizeArray(array, size);
+
+                printf("The input array:\n");
+                for (i = 0; i < size; i++) {
+                        printf("%d ", array[i]);
+                }
+                printf("\n\n");
+
+                BubbleSort(array, size);
+
+                printf("The sorted array:\n");
+                for (i = 0; i < size; i++) {
+                        printf("%d ", array[i]);
+                }
+                printf("\n\n");
+                break;
         }
 
         return 0;
