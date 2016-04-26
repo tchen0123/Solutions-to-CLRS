@@ -5,6 +5,7 @@
  */
 
 #include "insertion_sort.h"
+#include "merge_sort.h"
 #include "binary_sum.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,6 +26,7 @@ int main(void)
 
         printf("1.Insertion sort test\n");
         printf("2.Binary numbers sum test\n");
+        printf("3.Merge sort test\n");
         printf("Please enter your choice:\n");
         scanf("%d", &select);
 
@@ -80,6 +82,29 @@ int main(void)
                         printf("%d", binarySum[i]);
                 }
                 printf("\n");
+                break;
+        case 3:
+                for (i = 0; i < size; i++) {
+                        array[i] = i + 1;
+                }
+
+                RandomizeArray(array, size);
+
+                printf("The input array:\n");
+                for (i = 0; i < size; i++) {
+                        printf("%d ", array[i]);
+                }
+                printf("\n\n");
+
+                MergeSort(array, 0, size - 1);
+
+                printf("The array sorted:\n");
+                for (i = 0; i < size; i++) {
+                        printf("%d ", array[i]);
+                }
+                printf("\n\n");
+                break;
+
         }
 
         return 0;
