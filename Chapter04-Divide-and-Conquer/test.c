@@ -19,7 +19,10 @@ int main(void)
         }
         printf("\n\n");
 
-        struct maxSubarray_s subarray = MaxSubarray(array, 16);
+        struct maxSubarray_s subarray;
+
+        //subarray = MaxSubarray(array, 16);
+        subarray = FindMaxSubarray(array, 0, 15);
 
         printf("The maximum subarray is\n");
         for (i = subarray.low; i <= subarray.high; i++) {
