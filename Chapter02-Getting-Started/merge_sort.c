@@ -6,32 +6,32 @@
 
 #include "merge_sort.h"
 
-static void Merge(int array[], int head, int tail, int midd);
+static void Merge(int array[], int low, int high, int midd);
 
-void MergeSort(int array[], int head, int tail)
+void MergeSort(int array[], int low, int high)
 {
-        if (head < tail) {
-                int midd = (head + tail) / 2;
-                MergeSort(array, head, midd);
-                MergeSort(array, midd + 1, tail);
-                Merge(array, head, tail, midd);
+        if (low < high) {
+                int midd = (low + high) / 2;
+                MergeSort(array, low, midd);
+                MergeSort(array, midd + 1, high);
+                Merge(array, low, high, midd);
         }
 }
 
 /*
  * Array merge operation.
  */
-static void Merge(int array[], int head, int tail, int midd)
+static void Merge(int array[], int low, int high, int midd)
 {
         int leftLen, rightLen;
 
-        leftLen = midd - head + 1;
-        rightLen = tail - midd;
+        leftLen = midd - low + 1;
+        rightLen = high - midd;
 
         int left[leftLen], right[rightLen];
         int i, j;
         for (i = 0; i < leftLen; i++) {
-                left[i] = array[head + i];
+                left[i] = array[low + i];
         }
         for (j = 0; j < rightLen; j++) {
                 right[j] = array[midd + 1 + j];
@@ -39,14 +39,14 @@ static void Merge(int array[], int head, int tail, int midd)
 
         int k;
         i = j = 0;
-        for (k = head; k <= tail; k++) {
+        for (k = low; k <= high; k++) {
                 if (left[i] < right[j]) {
                         array[k] = left[i];
 
                         // If left array arrives the end
                         if (++i == leftLen) {
                                 k++;
-                                for (; k <= tail; k++) {
+                                for (; k <= high; k++) {
                                         array[k] = right[j];
                                         j++;
                                 }
@@ -58,7 +58,7 @@ static void Merge(int array[], int head, int tail, int midd)
                         // If right array arrives the end
                         if (++j == rightLen) {
                                 k++;
-                                for (; k <= tail; k++) {
+                                for (; k <= high; k++) {
                                         array[k] = left[i];
                                         i++;
                                 }
