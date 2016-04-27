@@ -15,5 +15,6 @@ struct maxSubarray_s {
 };
 
 struct maxSubarray_s MaxSubarray(int array[], int size);
+struct maxSubarray_s FindMaxSubarray(int array[], int low, int high);
 
 #endif
