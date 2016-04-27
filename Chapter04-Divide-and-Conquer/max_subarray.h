@@ -7,6 +7,13 @@
 #ifndef __MAX_SUBARRAY_H_
 #define __MAX_SUBARRAY_H_
 
-void MaxSubarray(int array[], int size, int *maxLow, int *maxHigh, int *maxSum);
+// max subarray structure */
+struct maxSubarray_s {
+        int low;
+        int high;
+        int sum;
+};
+
+struct maxSubarray_s MaxSubarray(int array[], int size);
 
 #endif

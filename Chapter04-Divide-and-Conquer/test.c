@@ -12,7 +12,6 @@ int main(void)
 {
         int i;
         int array[16] = {13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7};
-        int maxLow, maxHigh, maxSum;
 
         printf("The input array is\n");
         for (i = 0; i < 16; i++) {
@@ -20,13 +19,14 @@ int main(void)
         }
         printf("\n\n");
 
-        MaxSubarray(array, 16, &maxLow, &maxHigh, &maxSum);
+        struct maxSubarray_s subarray = MaxSubarray(array, 16);
 
         printf("The maximum subarray is\n");
-        for (i = maxLow; i <= maxHigh; i++) {
+        for (i = subarray.low; i <= subarray.high; i++) {
                 printf("%d ", array[i]);
         }
         printf("\n\n");
+        printf("Sum of the maximum subarray is %d\n", subarray.sum);
 
         return 0;
 }
