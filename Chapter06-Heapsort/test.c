@@ -5,6 +5,7 @@
  */
 
 #include "heapsort.h"
+#include "k_way_merge.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -23,7 +24,7 @@ int main(void)
 
         printf("Please enter your choice:\n");
         printf("1.Heapsort test\n");
-        printf("2.Priority quque test\n");
+        printf("2.Priority queue test\n");
         scanf("%d", &select);
 
         printf("How many integer numbers do you want to input?\n");
@@ -48,6 +49,10 @@ int main(void)
                 for (i = 0; i < size; i++) {
                         printf("%d ", array[i]);
                 }
+                printf("\n\n");
+                break;
+        case 2:
+                KwayMerge(10, 7);
                 printf("\n\n");
                 break;
         }
