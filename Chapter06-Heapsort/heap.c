@@ -14,7 +14,7 @@ static inline void Swap(int *a, int *b)
 }
 
 /*
- * Maintain the property of max heap.
+ * Maintain the max heap property.
  */
 void MaxHeapify(int array[], int size, int i)
 {
@@ -37,7 +37,7 @@ void MaxHeapify(int array[], int size, int i)
 }
 
 /*
- * Maintain the property of min heap.
+ * Maintain the min heap property.
  */
 void MinHeapify(int array[], int size, int i)
 {
