@@ -5,9 +5,11 @@
  */
 
 #include "heapsort.h"
-#include "k_way_merge.h"
+#include "Kway_merge.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#define ARRAY_MAX_SIZE 100
 
 static inline void Swap(int *a, int *b)
 {
@@ -22,28 +24,35 @@ int main(void)
 {
         int size, select, i;
 
+        int array[ARRAY_MAX_SIZE]; // heapsort test
+        int k, n; // k-way merge test
+
         printf("Please enter your choice:\n");
         printf("1.Heapsort test\n");
-        printf("2.Priority queue test\n");
+        printf("2.K-way merge test\n");
         scanf("%d", &select);
-
-        printf("How many integer numbers do you want to input?\n");
-        scanf("%d", &size);
-
-        int array[size];
-        for (i = 0; i < size; i++) {
-                array[i] = i + 1;
-        }
-        RandomizeArray(array, size);
-
-        printf("The input array:\n");
-        for (i = 0; i < size; i++) {
-                printf("%d ", array[i]);
-        }
-        printf("\n\n");
 
         switch (select) {
         case 1:
+                printf("How many integer numbers do you want to input?\n");
+                scanf("%d", &size);
+
+                if (size > ARRAY_MAX_SIZE) {
+                        fprintf(stderr, "Array size is limited within %d!\n", ARRAY_MAX_SIZE);
+                        return 0;
+                }
+
+                for (i = 0; i < size; i++) {
+                        array[i] = i + 1;
+                }
+                RandomizeArray(array, size);
+
+                printf("The input array:\n");
+                for (i = 0; i < size; i++) {
+                        printf("%d ", array[i]);
+                }
+                printf("\n\n");
+
                 HeapSort(array, size);
                 printf("The sorted array:\n");
                 for (i = 0; i < size; i++) {
@@ -52,7 +61,17 @@ int main(void)
                 printf("\n\n");
                 break;
         case 2:
-                KwayMerge(10, 7);
+                printf("Please input k: ");
+                scanf("%d", &k);
+                printf("Please input n: ");
+                scanf("%d", &n);
+
+                if (k > HEAP_MAX_SIZE) {
+                        fprintf(stderr, "Heap size is limited within %d!\n", HEAP_MAX_SIZE);
+                        return 0;
+                }
+
+                KwayMerge(k, n);
                 printf("\n\n");
                 break;
         }
