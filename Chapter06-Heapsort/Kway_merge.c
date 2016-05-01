@@ -74,7 +74,7 @@ static struct heap_s *InitMinHeap(int k);
 /*
  * Yeah, yeah, it's ugly, but I cannot find how to do this correctly
  * and this seems to work. I will try to use other algorithms called
- * Lose Tree.
+ * Loser Tree.
  */
 void KwayMerge(int k, int n)
 {
