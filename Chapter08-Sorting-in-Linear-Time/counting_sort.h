@@ -7,6 +7,6 @@
 #ifndef __COUNTING_SORT_H_
 #define __COUNTING_SORT_H_
 
-void CountingSort(int array[], int result[], int arraySize);
+void CountingSort(const int array[], int result[], const int arraySize);
 
 #endif
