@@ -5,6 +5,7 @@
  */
 
 #include "counting_sort.h"
+#include "radix_sort.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -15,7 +16,7 @@ static inline void Swap(int *a, int *b)
         *b = temp;
 }
 
-static void CreateArray(int array[], int size);
+static void CreateArray(int array[], const int size);
 
 int main(void)
 {
@@ -23,6 +24,8 @@ int main(void)
 
         printf("Please enter your choice:\n");
         printf("1.Counting sort test\n");
+        printf("2.Radix sort test\n");
+        printf("3.Bucket sort test\n");
         scanf("%d", &select);
 
         printf("How many integer numbers do you want to input?\n");
@@ -47,18 +50,26 @@ int main(void)
                 }
                 printf("\n\n");
                 break;
+        case 2:
+                RadixSort(array, result, size);
+
+                printf("The sorted array:\n");
+                for (i = 0; i < size; i++) {
+                        printf("%d ", result[i]);
+                }
+                break;
         }
 
         return 0;
 }
 
-
 /*
- * Create a random array.
+ * Create random array.
  */
-static void CreateArray(int array[], int size)
+static void CreateArray(int array[], const int size)
 {
         int i;
+
         for (i = 0; i < size; i++) {
                 array[i] = rand() % (size * size * size);
         }
