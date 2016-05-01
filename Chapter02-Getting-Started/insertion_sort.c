@@ -9,7 +9,7 @@
 /*
  * Insertion sort.
  */
-void InsertionSort(int array[], int size)
+void InsertionSort(int array[], const int size)
 {
         int i;
 

@@ -7,6 +7,6 @@
 #ifndef __INSERTION_SORT_H_
 #define __INSERTION_SORT_H_
 
-void InsertionSort(int array[], int size);
+void InsertionSort(int array[], const int size);
 
 #endif

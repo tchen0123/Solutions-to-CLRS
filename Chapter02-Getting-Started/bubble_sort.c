@@ -13,7 +13,7 @@ static inline void Swap(int *a, int *b)
         *b = temp;
 }
 
-void BubbleSort(int array[], int size)
+void BubbleSort(int array[], const int size)
 {
         int i, j;
 

@@ -7,6 +7,6 @@
 #ifndef __MERGE_SORT_H_
 #define __MERGE_SORT_H_
 
-void MergeSort(int array[], int low, int high);
+void MergeSort(int array[], const int low, const int high);
 
 #endif

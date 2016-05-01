@@ -6,9 +6,9 @@
 
 #include "merge_sort.h"
 
-static void Merge(int array[], int low, int high, int midd);
+static void Merge(int array[], const int low, const int high, const int midd);
 
-void MergeSort(int array[], int low, int high)
+void MergeSort(int array[], const int low, const int high)
 {
         if (low < high) {
                 int midd = (low + high) / 2;
@@ -21,7 +21,7 @@ void MergeSort(int array[], int low, int high)
 /*
  * Array merge operation.
  */
-static void Merge(int array[], int low, int high, int midd)
+static void Merge(int array[], const int low, const int high, const int midd)
 {
         int leftLen, rightLen;
 

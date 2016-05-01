@@ -7,7 +7,7 @@
 /*
  * Binary numbers sum.
  */
-void BinarySum(int A[], int B[], int size, int sum[])
+void BinarySum(const int A[], const int B[], const int size, int sum[])
 {
         int i, over, tempSum;
 
