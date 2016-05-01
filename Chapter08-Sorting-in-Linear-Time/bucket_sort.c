@@ -73,9 +73,12 @@ void BucketSort(int array[], const int arraySize)
         len = max - min + 1;
 
         struct list_s *bucket[arraySize];
+        memset(bucket, 0, sizeof(struct list_s *) * arraySize);
+        /*
         for (i = 0; i < arraySize; i++) {
                 bucket[i] = NULL;
         }
+        */
 
         // Insert to bucket
         for (i = 0; i < arraySize; i++) {
