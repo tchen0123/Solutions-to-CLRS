@@ -6,6 +6,7 @@
 
 #include "counting_sort.h"
 #include "radix_sort.h"
+#include "bucket_sort.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -56,6 +57,14 @@ int main(void)
                 printf("The sorted array:\n");
                 for (i = 0; i < size; i++) {
                         printf("%d ", result[i]);
+                }
+                break;
+        case 3:
+                BucketSort(array, size);
+
+                printf("The sorted array:\n");
+                for (i = 0; i < size; i++) {
+                        printf("%d ", array[i]);
                 }
                 break;
         }

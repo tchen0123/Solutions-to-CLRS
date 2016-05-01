@@ -45,7 +45,7 @@ static inline int Maximum(int array[], int size, int index)
 
 static void CountingSort(int array[], int result[], int arraySize, int index);
 
-void RadixSort(int array[], int result[], int arraySize)
+void RadixSort(int array[], int result[], const int arraySize)
 {
         int i, size;
 
