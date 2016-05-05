@@ -8,6 +8,7 @@
 #include "merge_sort.h"
 #include "bubble_sort.h"
 #include "binary_sum.h"
+#include "inversion.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -29,6 +30,7 @@ int main(void)
         printf("2.Binary numbers sum test\n");
         printf("3.Merge sort test\n");
         printf("4.Bubble sort test\n");
+        printf("5.Inversion test\n");
         printf("Please enter your choice:\n");
         scanf("%d", &select);
 
@@ -127,6 +129,20 @@ int main(void)
                 }
                 printf("\n\n");
                 break;
+        case 5:
+                for (i = 0; i < size; i++) {
+                        array[i] = i + 1;
+                }
+
+                RandomizeArray(array, size);
+
+                printf("The input array:\n");
+                for (i = 0; i < size; i++) {
+                        printf("%d ", array[i]);
+                }
+                printf("\n\n");
+
+                printf("The number of inversions is %d\n\n", FindInversion(array, size));
         }
 
         return 0;
