@@ -116,14 +116,8 @@ struct ostree_s *OstreeDelete(struct ostree_s *root, int num)
                 return root;
         }
 
-        // reduce size
-        struct ostree_s *tempPtr = targetPtr;
-        while (tempPtr != treeNil_g) {
-                tempPtr->size--;
-                tempPtr = tempPtr->parent;
-        }
-
         struct ostree_s *yPtr = targetPtr, *xPtr;
+        struct ostree_s *tempPtr = yPtr->parent; // in order to reduce size
         bool yColor = yPtr->color;
 
         if (targetPtr->left == treeNil_g) {
@@ -136,6 +130,7 @@ struct ostree_s *OstreeDelete(struct ostree_s *root, int num)
                 yPtr = Minimum(targetPtr->right);
                 yColor = yPtr->color;
                 xPtr = yPtr->right;
+                tempPtr = yPtr->parent;
 
                 if (yPtr == targetPtr->right) {
                         xPtr->parent = yPtr;
@@ -148,6 +143,13 @@ struct ostree_s *OstreeDelete(struct ostree_s *root, int num)
                 yPtr->left = targetPtr->left;
                 yPtr->left->parent = yPtr;
                 yPtr->color = targetPtr;
+        }
+        free(targetPtr);
+
+        // reduce size
+        while (tempPtr != treeNil_g) {
+                tempPtr->size--;
+                tempPtr = tempPtr->parent;
         }
 
         if (yColor == RB_BLACK) {
@@ -408,25 +410,26 @@ void OstreeWalkBylevel(struct ostree_s *root)
  */
 void DeleteOstree(struct ostree_s *root)
 {
-        struct queue_s *queue = InitQueue();
+        if (root == nullptr) {
+                return;
+        } else if (root != treeNil_g) {
+                struct queue_s *queue = InitQueue();
 
-        EnQueue(queue, root);
-        do {
-                struct ostree_s *treePtr = DeQueue(queue);
+                EnQueue(queue, root);
+                do {
+                        root = DeQueue(queue);
 
-                if (treePtr->left != treeNil_g) {
-                        EnQueue(queue, treePtr->left);
-                }
-                if (treePtr->right != treeNil_g) {
-                        EnQueue(queue, treePtr->right);
-                }
-
-                free(treePtr);
-        } while (!QueueIsEmpty(queue));
-        DeleteQueue(queue);
-
+                        if (root->left != treeNil_g) {
+                                EnQueue(queue, root->left);
+                        }
+                        if (root->right != treeNil_g) {
+                                EnQueue(queue, root->right);
+                        }
+                        free(root);
+                } while (!QueueIsEmpty(queue));
+                DeleteQueue(queue);
+        }
         free(treeNil_g);
-
 }
 
 /*
