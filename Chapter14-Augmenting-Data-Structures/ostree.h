@@ -7,10 +7,8 @@
 #ifndef __OSTREE_H_
 #define __OSTREE_H_
 
-
 #define RB_RED      0
 #define RB_BLACK    1
-
 
 struct ostree_s {
         int value;
@@ -21,12 +19,12 @@ struct ostree_s {
 };
 
 struct ostree_s *InitOstreeNil(void);
-struct ostree_s *OstreeInsert(struct ostree_s *treeRoot, int num);
-struct ostree_s *OstreeDelete(struct ostree_s *treeRoot, int num);
-void OstreeWalkBylevel(struct ostree_s *treeRoot);
-struct ostree_s *OstreeSelect(struct ostree_s *treeRoot, unsigned int rank);
-unsigned int OstreeRank(struct ostree_s *treeRoot, struct ostree_s *targetPtr);
-void DeleteOstree(struct ostree_s *treeRoot);
-struct ostree_s *OstreeSearch(struct ostree_s *treeRoot, int num);
+struct ostree_s *OstreeInsert(struct ostree_s *root, int num);
+struct ostree_s *OstreeDelete(struct ostree_s *root, int num);
+struct ostree_s *OstreeSearch(struct ostree_s *root, int num);
+struct ostree_s *OstreeSelect(struct ostree_s *root, unsigned int rank);
+unsigned int OstreeRank(struct ostree_s *root, struct ostree_s *targetPtr);
+void OstreeWalkBylevel(struct ostree_s *root);
+void DeleteOstree(struct ostree_s *root);
 
 #endif

@@ -5,8 +5,8 @@
  */
 
 #include "ostree.h"
-#include <iostream>
 #include <stdlib.h>
+#include <iostream>
 
 static inline void Swap(int *a, int *b)
 {
@@ -19,13 +19,12 @@ static void RandomizeArray(int array[], unsigned int size);
 
 int main()
 {
-        unsigned int select = 0;
+        unsigned int select;
         std::cout << "Please enter your choice:\n";
-        std::cout << "1.Order statistic test\n";
-        std::cout << "2.Inversion test\n";
+        std::cout << "1.Inversion test\n";
         std::cin >> select;
 
-        unsigned int size = 0;
+        unsigned int size;
         std::cout << "Please enter the array size:\n";
         std::cin >> size;
 
@@ -49,16 +48,6 @@ int main()
         case 1:
                 for (i = 0; i < size; i++) {
                         ostree = OstreeInsert(ostree, array[i]);
-                }
-                std::cout << std::endl;
-
-                std::cout << "Tree walk by level:\n";
-                OstreeWalkBylevel(ostree);
-                std::cout << std::endl;
-                break;
-        case 2:
-                for (i = 0; i < size; i++) {
-                        ostree = OstreeInsert(ostree, array[i]);
 
                         // i + 1 is the current tree node number.
                         // OstreeRank is the number of tree nodes that are less than them.
@@ -66,6 +55,8 @@ int main()
                 }
                 std::cout << "The number of inversions:\n";
                 std::cout << inversionSum << std::endl;
+
+                DeleteOstree(ostree);
                 break;
         }
 
@@ -73,7 +64,7 @@ int main()
 }
 
 /*
- * Randomize the array.
+ * Randomize arrray.
  */
 static void RandomizeArray(int array[], unsigned int size)
 {

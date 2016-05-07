@@ -9,7 +9,21 @@
 #include <stdlib.h>
 #include <iostream>
 
-static struct ostree_s *treeNil_g; // Sentinel tree nil
+
+static struct ostree_s *treeNil_g; // sentinel tree nil
+
+
+/*
+ * Calculate the rank.
+ */
+static inline unsigned int Rank(struct ostree_s *ostree)
+{
+        if (ostree != treeNil_g) {
+                return ostree->left->size + 1;
+        } else {
+                return 0;
+        }
+}
 
 
 /*
@@ -27,35 +41,28 @@ static inline struct ostree_s *CreateNode(int num)
         return newNode;
 }
 
-static inline unsigned int Rank(struct ostree_s *treePtr)
-{
-        if (treePtr != treeNil_g) {
-                return treePtr->left->size + 1;
-        } else {
-                return 0;
-        }
-}
-
 /*
  * Search the minimum node.
  */
-static inline struct ostree_s *Minimum(struct ostree_s *treeRoot)
+static inline struct ostree_s *Minimum(struct ostree_s *root)
 {
-        while (treeRoot != treeNil_g && treeRoot->left != treeNil_g) {
-                treeRoot = treeRoot->left;
+        while (root != treeNil_g && root->left != treeNil_g) {
+                root = root->left;
         }
-        return treeRoot;
+
+        return root;
 }
 
-static struct ostree_s *LeftRotate(struct ostree_s *treeRoot, struct ostree_s *targetPtr);
-static struct ostree_s *RightRotate(struct ostree_s *treeRoot, struct ostree_s *targetPtr);
-static struct ostree_s *Transplant(struct ostree_s *treeRoot, struct ostree_s *oldPtr, struct ostree_s *newPtr);
-static struct ostree_s *OstreeInsertFixup(struct ostree_s *treeRoot, struct ostree_s *targetPtr);
-static struct ostree_s *OstreeDeleteFixup(struct ostree_s *treeRoot, struct ostree_s *targetPtr);
+
+static struct ostree_s *LeftRotate(struct ostree_s *root, struct ostree_s *targetPtr);
+static struct ostree_s *RightRotate(struct ostree_s *root, struct ostree_s *targetPtr);
+static struct ostree_s *OstreeInsertFixup(struct ostree_s *root, struct ostree_s *targetPtr);
+static struct ostree_s *OstreeDeleteFixup(struct ostree_s *root, struct ostree_s *targetPtr);
+static struct ostree_s *Transplant(struct ostree_s *root, struct ostree_s *oldPtr, struct ostree_s *newPtr);
 
 
 /*
- * Initialize tree nil.
+ * Initialize ostree nil.
  */
 struct ostree_s *InitOstreeNil(void)
 {
@@ -69,11 +76,9 @@ struct ostree_s *InitOstreeNil(void)
 /*
  * Ostree insertion.
  */
-struct ostree_s *OstreeInsert(struct ostree_s *treeRoot, int num)
+struct ostree_s *OstreeInsert(struct ostree_s *root, int num)
 {
-        struct ostree_s *prev = treeNil_g;
-        struct ostree_s *curr = treeRoot;
-
+        struct ostree_s *prev = treeNil_g, *curr = root;
         while (curr != treeNil_g) {
                 prev = curr;
                 curr->size++;
@@ -89,45 +94,44 @@ struct ostree_s *OstreeInsert(struct ostree_s *treeRoot, int num)
         struct ostree_s *newNode = CreateNode(num);
         newNode->parent = prev;
         if (prev == treeNil_g) {
-                treeRoot = newNode;
+                root = newNode;
         } else if (prev->value > num) {
                 prev->left = newNode;
         } else {
                 prev->right = newNode;
         }
 
-        treeRoot = OstreeInsertFixup(treeRoot, newNode);
+        root = OstreeInsertFixup(root, newNode);
 
-        return treeRoot;
+        return root;
 }
 
 /*
  * Ostree deletion.
  */
-struct ostree_s *OstreeDelete(struct ostree_s *treeRoot, int num)
+struct ostree_s *OstreeDelete(struct ostree_s *root, int num)
 {
-        // Search
-        struct ostree_s *targetPtr = OstreeSearch(treeRoot, num);
+        struct ostree_s *targetPtr = OstreeSearch(root, num);
         if (targetPtr == treeNil_g) {
-                return treeRoot;
+                return root;
         }
 
-        // Reduce size
-        struct ostree_s *temp = targetPtr;
-        while (temp != treeNil_g) {
-                temp->size--;
-                temp = temp->parent;
+        // reduce size
+        struct ostree_s *tempPtr = targetPtr;
+        while (tempPtr != treeNil_g) {
+                tempPtr->size--;
+                tempPtr = tempPtr->parent;
         }
 
-        struct ostree_s *yPtr = targetPtr, *xPtr = nullptr;
+        struct ostree_s *yPtr = targetPtr, *xPtr;
         bool yColor = yPtr->color;
 
         if (targetPtr->left == treeNil_g) {
                 xPtr = targetPtr->right;
-                treeRoot = Transplant(treeRoot, targetPtr, targetPtr->right);
+                root = Transplant(root, targetPtr, targetPtr->right);
         } else if (targetPtr->right == treeNil_g) {
                 xPtr = targetPtr->left;
-                treeRoot = Transplant(treeRoot, targetPtr, targetPtr->left);
+                root = Transplant(root, targetPtr, targetPtr->left);
         } else {
                 yPtr = Minimum(targetPtr->right);
                 yColor = yPtr->color;
@@ -136,28 +140,42 @@ struct ostree_s *OstreeDelete(struct ostree_s *treeRoot, int num)
                 if (yPtr == targetPtr->right) {
                         xPtr->parent = yPtr;
                 } else {
-                        treeRoot = Transplant(treeRoot, yPtr, yPtr->right);
+                        root = Transplant(root, yPtr, yPtr->right);
                         yPtr->right = targetPtr->right;
                         yPtr->right->parent = yPtr;
                 }
-                treeRoot = Transplant(treeRoot, targetPtr, yPtr);
+                root = Transplant(root, targetPtr, yPtr);
                 yPtr->left = targetPtr->left;
                 yPtr->left->parent = yPtr;
-                yPtr->color = targetPtr->color;
+                yPtr->color = targetPtr;
         }
-        free(targetPtr);
 
         if (yColor == RB_BLACK) {
-                treeRoot = OstreeDeleteFixup(treeRoot, xPtr);
+                root = OstreeDeleteFixup(root, xPtr);
         }
 
-        return treeRoot;
+        return root;
 }
 
 /*
- * Ostree lefet rotation.
+ * Search a node.
  */
-static struct ostree_s *LeftRotate(struct ostree_s *treeRoot, struct ostree_s *targetPtr)
+struct ostree_s *OstreeSearch(struct ostree_s *root, int num)
+{
+        while (root != treeNil_g && root->value != num) {
+                if (root->value > num) {
+                        root = root->left;
+                } else {
+                        root = root->right;
+                }
+        }
+        return root;
+}
+
+/*
+ * Ostree left rotation.
+ */
+static struct ostree_s *LeftRotate(struct ostree_s *root, struct ostree_s *targetPtr)
 {
         struct ostree_s *right = targetPtr->right;
         targetPtr->right = right->left;
@@ -168,7 +186,7 @@ static struct ostree_s *LeftRotate(struct ostree_s *treeRoot, struct ostree_s *t
         struct ostree_s *parent = targetPtr->parent;
         right->parent = parent;
         if (parent == treeNil_g) {
-                treeRoot = right;
+                root = right;
         } else if (parent->left == targetPtr) {
                 parent->left = right;
         } else {
@@ -181,13 +199,13 @@ static struct ostree_s *LeftRotate(struct ostree_s *treeRoot, struct ostree_s *t
         right->size = targetPtr->size;
         targetPtr->size = targetPtr->left->size + targetPtr->right->size + 1;
 
-        return treeRoot;
+        return root;
 }
 
 /*
  * Ostree right rotation.
  */
-static struct ostree_s *RightRotate(struct ostree_s *treeRoot, struct ostree_s *targetPtr)
+static struct ostree_s *RightRotate(struct ostree_s *root, struct ostree_s *targetPtr)
 {
         struct ostree_s *left = targetPtr->left;
         targetPtr->left = left->right;
@@ -198,7 +216,7 @@ static struct ostree_s *RightRotate(struct ostree_s *treeRoot, struct ostree_s *
         struct ostree_s *parent = targetPtr->parent;
         left->parent = parent;
         if (parent == treeNil_g) {
-                treeRoot = left;
+                root = left;
         } else if (parent->left == targetPtr) {
                 parent->left = left;
         } else {
@@ -211,31 +229,13 @@ static struct ostree_s *RightRotate(struct ostree_s *treeRoot, struct ostree_s *
         left->size = targetPtr->size;
         targetPtr->size = targetPtr->left->size + targetPtr->right->size + 1;
 
-        return treeRoot;
-}
-
-/*
- * Ostree transplant.
- */
-static struct ostree_s *Transplant(struct ostree_s *treeRoot, struct ostree_s *oldPtr, struct ostree_s *newPtr)
-{
-        struct ostree_s *parent = oldPtr->parent;
-        newPtr->parent = parent;
-        if (parent == treeNil_g) {
-                treeRoot = newPtr;
-        } else if (parent->left == oldPtr) {
-                parent->left = newPtr;
-        } else {
-                parent->right = newPtr;
-        }
-
-        return treeRoot;
+        return root;
 }
 
 /*
  * Ostree insertion fix up.
  */
-static struct ostree_s *OstreeInsertFixup(struct ostree_s *treeRoot, struct ostree_s *targetPtr)
+static struct ostree_s *OstreeInsertFixup(struct ostree_s *root, struct ostree_s *targetPtr)
 {
         while (targetPtr->parent->color == RB_RED) {
                 if (targetPtr->parent == targetPtr->parent->parent->left) {
@@ -250,12 +250,13 @@ static struct ostree_s *OstreeInsertFixup(struct ostree_s *treeRoot, struct ostr
                         } else {
                                 if (targetPtr == targetPtr->parent->right) {
                                         targetPtr = targetPtr->parent;
-                                        treeRoot = LeftRotate(treeRoot, targetPtr);
+
+                                        root = LeftRotate(root, targetPtr);
                                 }
                                 targetPtr->parent->parent->color = RB_RED;
                                 targetPtr->parent->color = RB_BLACK;
 
-                                treeRoot = RightRotate(treeRoot, targetPtr->parent->parent);
+                                root = RightRotate(root, targetPtr->parent->parent);
                         }
                 } else {
                         struct ostree_s *uncle = targetPtr->parent->parent->left;
@@ -270,26 +271,44 @@ static struct ostree_s *OstreeInsertFixup(struct ostree_s *treeRoot, struct ostr
                                 if (targetPtr == targetPtr->parent->left) {
                                         targetPtr = targetPtr->parent;
 
-                                        treeRoot = RightRotate(treeRoot, targetPtr);
+                                        root = RightRotate(root, targetPtr);
                                 }
                                 targetPtr->parent->parent->color = RB_RED;
                                 targetPtr->parent->color = RB_BLACK;
 
-                                treeRoot = LeftRotate(treeRoot, targetPtr->parent->parent);
+                                root = LeftRotate(root, targetPtr->parent->parent);
                         }
                 }
         }
-        treeRoot->color = RB_BLACK;
+        root->color = RB_BLACK;
 
-        return treeRoot;
+        return root;
+}
+
+/*
+ * Ostree transplant.
+ */
+static struct ostree_s *Transplant(struct ostree_s *root, struct ostree_s *oldPtr, struct ostree_s *newPtr)
+{
+        struct ostree_s *parent = oldPtr->parent;
+        newPtr->parent = parent;
+        if (parent == treeNil_g) {
+                root = newPtr;
+        } else if (parent->left == oldPtr) {
+                parent->left = newPtr;
+        } else {
+                parent->right = newPtr;
+        }
+
+        return root;
 }
 
 /*
  * Ostree deletion fix up.
  */
-static struct ostree_s *OstreeDeleteFixup(struct ostree_s *treeRoot, struct ostree_s *targetPtr)
+static struct ostree_s *OstreeDeleteFixup(struct ostree_s *root, struct ostree_s *targetPtr)
 {
-        while (targetPtr != treeRoot && targetPtr->color == RB_BLACK) {
+        while (targetPtr != root && targetPtr->color == RB_BLACK) {
                 if (targetPtr == targetPtr->parent->left) {
                         struct ostree_s *sibling = targetPtr->parent->right;
 
@@ -297,7 +316,7 @@ static struct ostree_s *OstreeDeleteFixup(struct ostree_s *treeRoot, struct ostr
                                 sibling->color = RB_BLACK;
                                 targetPtr->parent->color = RB_RED;
 
-                                treeRoot = LeftRotate(treeRoot, targetPtr->parent);
+                                root = LeftRotate(root, targetPtr->parent);
                                 sibling = targetPtr->parent->right;
                         }
                         if (sibling->left->color == RB_BLACK && sibling->right->color == RB_BLACK) {
@@ -308,15 +327,15 @@ static struct ostree_s *OstreeDeleteFixup(struct ostree_s *treeRoot, struct ostr
                                         sibling->color = RB_RED;
                                         sibling->left->color = RB_BLACK;
 
-                                        treeRoot = RightRotate(treeRoot, sibling);
+                                        root = RightRotate(root, sibling);
                                         sibling = targetPtr->parent->right;
                                 }
                                 sibling->color = targetPtr->parent->color;
                                 targetPtr->parent->color = RB_BLACK;
                                 sibling->right->color = RB_BLACK;
 
-                                treeRoot = LeftRotate(treeRoot, targetPtr->parent);
-                                targetPtr = treeRoot;
+                                root = LeftRotate(root, targetPtr->parent);
+                                targetPtr = root;
                         }
                 } else {
                         struct ostree_s *sibling = targetPtr->parent->left;
@@ -325,7 +344,7 @@ static struct ostree_s *OstreeDeleteFixup(struct ostree_s *treeRoot, struct ostr
                                 sibling->color = RB_BLACK;
                                 targetPtr->parent->color = RB_RED;
 
-                                treeRoot = RightRotate(treeRoot, targetPtr->parent);
+                                root = RightRotate(root, targetPtr->parent);
                                 sibling = targetPtr->parent->left;
                         }
                         if (sibling->left->color == RB_BLACK && sibling->right->color == RB_BLACK) {
@@ -333,40 +352,36 @@ static struct ostree_s *OstreeDeleteFixup(struct ostree_s *treeRoot, struct ostr
                                 targetPtr = targetPtr->parent;
                         } else {
                                 if (sibling->left->color == RB_BLACK) {
-                                        sibling->color = RB_RED;
                                         sibling->right->color = RB_BLACK;
+                                        sibling->color = RB_RED;
 
-                                        treeRoot = LeftRotate(treeRoot, sibling);
+                                        root = LeftRotate(root, sibling);
                                         sibling = targetPtr->parent->left;
                                 }
                                 sibling->color = targetPtr->parent->color;
                                 targetPtr->parent->color = RB_BLACK;
                                 sibling->left->color = RB_BLACK;
 
-                                treeRoot = RightRotate(treeRoot, targetPtr->parent);
-                                targetPtr = treeRoot;
+                                root = RightRotate(root, targetPtr->parent);
+                                targetPtr = root;
                         }
                 }
         }
         targetPtr->color = RB_BLACK;
 
-        return treeRoot;
+        return root;
 }
 
 /*
  * Ostree walk by level.
  */
-void OstreeWalkBylevel(struct ostree_s *treeRoot)
+void OstreeWalkBylevel(struct ostree_s *root)
 {
-        if (treeRoot == nullptr || treeRoot == treeNil_g) {
-                return;
-        }
-
         struct queue_s *queue = InitQueue();
 
         // Breadth first search
-        EnQueue(queue, treeRoot);
-        EnQueue(queue, nullptr);
+        EnQueue(queue, root);
+        EnQueue(queue, nullptr); // newline flag
         do {
                 struct ostree_s *treePtr = DeQueue(queue);
 
@@ -379,43 +394,69 @@ void OstreeWalkBylevel(struct ostree_s *treeRoot)
                         if (treePtr->right != treeNil_g) {
                                 EnQueue(queue, treePtr->right);
                         }
-                } else if (!QueueIsEmpty(queue)) {
-                        std::cout << std::endl;
+                } else if (!QueueIsEmpty(queue)) { // newline
+                        std::cout << '\n';
                         EnQueue(queue, nullptr);
                 }
         } while (!QueueIsEmpty(queue));
+
+        DeleteQueue(queue);
+}
+
+/*
+ * Delete the whole ostree.
+ */
+void DeleteOstree(struct ostree_s *root)
+{
+        struct queue_s *queue = InitQueue();
+
+        EnQueue(queue, root);
+        do {
+                struct ostree_s *treePtr = DeQueue(queue);
+
+                if (treePtr->left != treeNil_g) {
+                        EnQueue(queue, treePtr->left);
+                }
+                if (treePtr->right != treeNil_g) {
+                        EnQueue(queue, treePtr->right);
+                }
+
+                free(treePtr);
+        } while (!QueueIsEmpty(queue));
+        DeleteQueue(queue);
+
+        free(treeNil_g);
+
 }
 
 /*
  * Select the tree node ranked rank.
  */
-struct ostree_s *OstreeSelect(struct ostree_s *treeRoot, unsigned int rank)
+struct ostree_s *OstreeSelect(struct ostree_s *root, unsigned int rank)
 {
-        unsigned int tempRank = Rank(treeRoot);
-        while (treeRoot != treeNil_g && tempRank != rank) {
+        unsigned int tempRank = Rank(root);
+
+        while (root != treeNil_g && tempRank != rank) {
                 if (tempRank > rank) {
-                        treeRoot = treeRoot->left;
+                        root = root->left;
                 } else {
-                        treeRoot = treeRoot->right;
+                        root = root->right;
                         rank -= tempRank;
                 }
-                tempRank = Rank(treeRoot);
+                tempRank = Rank(root);
         }
 
-        if (treeRoot != treeNil_g) {
-                return treeRoot;
-        } else {
-                return nullptr;
-        }
+        return root;
 }
 
 /*
- * Calculate the rank of the tree node.
+ * Calculate the rank.
  */
-unsigned int OstreeRank(struct ostree_s *treeRoot, struct ostree_s *targetPtr)
+unsigned int OstreeRank(struct ostree_s *root, struct ostree_s *targetPtr)
 {
-        unsigned int rank = targetPtr->left->size + 1;
-        while (targetPtr != treeRoot) {
+        unsigned int rank = Rank(targetPtr);
+
+        while (targetPtr != root) {
                 if (targetPtr == targetPtr->parent->right) {
                         rank += targetPtr->parent->left->size + 1;
                 }
@@ -423,19 +464,4 @@ unsigned int OstreeRank(struct ostree_s *treeRoot, struct ostree_s *targetPtr)
         }
 
         return rank;
-}
-
-/*
- * Search a tree node.
- */
-struct ostree_s *OstreeSearch(struct ostree_s *treeRoot, int num)
-{
-        while (treeRoot != treeNil_g && treeRoot->value != num) {
-                if (treeRoot->value > num) {
-                        treeRoot = treeRoot->left;
-                } else {
-                        treeRoot = treeRoot->right;
-                }
-        }
-        return treeRoot;
 }

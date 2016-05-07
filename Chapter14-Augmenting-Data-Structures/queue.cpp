@@ -19,8 +19,9 @@ static inline struct queueNode_s *CreateNode(struct ostree_s *ostree)
         return newNode;
 }
 
+
 /*
- * Initialuze queue.
+ * Initialize queue.
  */
 struct queue_s *InitQueue(void)
 {
@@ -48,8 +49,8 @@ void EnQueue(struct queue_s *queue, struct ostree_s *ostree)
 struct ostree_s *DeQueue(struct queue_s *queue)
 {
         if (!QueueIsEmpty(queue)) {
-                struct queueNode_s *tempPtr = queue->head;
-                struct ostree_s *retPtr = tempPtr->ostree;
+                struct queueNode_s *tempNode = queue->head;
+                struct ostree_s *retPtr = tempNode->ostree;
 
                 if (queue->size != 1) {
                         queue->head = queue->head->next;
@@ -57,7 +58,7 @@ struct ostree_s *DeQueue(struct queue_s *queue)
                         queue->head = queue->tail = nullptr;
                 }
                 queue->size--;
-                free(tempPtr);
+                free(tempNode);
 
                 return retPtr;
         } else {
@@ -75,7 +76,7 @@ bool QueueIsEmpty(struct queue_s *queue)
  */
 void DeleteQueue(struct queue_s *queue)
 {
-        while (queue->head != nullptr) {
+        while (queue->head) {
                 struct queueNode_s *tempPtr = queue->head;
                 queue->head = queue->head->next;
                 free(tempPtr);

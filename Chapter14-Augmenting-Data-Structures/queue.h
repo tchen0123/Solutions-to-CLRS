@@ -15,8 +15,7 @@ struct queueNode_s {
 };
 
 struct queue_s {
-        struct queueNode_s *head;
-        struct queueNode_s *tail;
+        struct queueNode_s *head, *tail;
         unsigned int size;
 };
 
