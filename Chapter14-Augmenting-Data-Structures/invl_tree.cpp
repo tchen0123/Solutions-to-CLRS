@@ -88,7 +88,7 @@ struct invlTree_s *InvltreeInsert(struct invlTree_s *root, struct invl_s interva
         while (curr != treeNil_g) {
                 prev = curr;
                 // Update max point
-                if (curr->maxEndpoint > interval.high) {
+                if (curr->maxEndpoint < interval.high) {
                         curr->maxEndpoint = interval.high;
                 }
 
@@ -215,7 +215,7 @@ static struct invlTree_s *RightRotate(struct invlTree_s *root, struct invlTree_s
         left->parent = parent;
         if (parent == treeNil_g) {
                 root = left;
-        } else if (parent->left == treeNil_g) {
+        } else if (parent->left == targetPtr) {
                 parent->left = left;
         } else {
                 parent->right = left;
@@ -390,9 +390,11 @@ struct invlTree_s *InvltreeSearch(struct invlTree_s *root, struct invl_s interva
  */
 void InvltreeWalkBylevel(struct invlTree_s *root)
 {
+        /*
         if (root == nullptr || root == treeNil_g) {
                 return;
         }
+        */
 
         struct invlqueue_s *queue = InitInvlqueue();
 
@@ -411,7 +413,7 @@ void InvltreeWalkBylevel(struct invlTree_s *root)
                                 EnInvlqueue(queue, treePtr->right);
                         }
                 } else if (!InvlqueueIsEmpty(queue)) { // newline
-                        std::cout << '\n';
+                        std::cout << std::endl;
                         EnInvlqueue(queue, nullptr);
                 }
         } while (!InvlqueueIsEmpty(queue));
@@ -440,21 +442,10 @@ void DeleteInvltree(struct invlTree_s *root)
                                 EnInvlqueue(queue, root->right);
                         }
                         free(root);
-                        std::cout << 1 << std::endl;
                 } while (!InvlqueueIsEmpty(queue));
 
                 DeleteInvlqueue(queue);
         }
 
         free(treeNil_g);
-}
-
-
-void InvltreeWalkInorder(struct invlTree_s *root)
-{
-        if (root != treeNil_g) {
-                InvltreeWalkInorder(root->left);
-                std::cout << "inorder" << std::endl;
-                InvltreeWalkInorder(root->right);
-        }
 }

@@ -77,8 +77,6 @@ int main()
                 std::cout << "Tree walk by level\n";
                 InvltreeWalkBylevel(invlTree);
                 std::cout << std::endl;
-                InvltreeWalkInorder(invlTree);
-                std::cout << std::endl;
 
                 std::cout << "Please enter a interval\n";
                 std::cout << "Low:";

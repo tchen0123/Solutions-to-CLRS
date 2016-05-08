@@ -31,7 +31,6 @@ struct invlTree_s *InvltreeInsert(struct invlTree_s *root, struct invl_s interva
 struct invlTree_s *InvltreeDelete(struct invlTree_s *root, struct invl_s interval);
 struct invlTree_s *InvltreeSearch(struct invlTree_s *root, struct invl_s interval);
 void InvltreeWalkBylevel(struct invlTree_s *root);
-void InvltreeWalkInorder(struct invlTree_s *root);
 void DeleteInvltree(struct invlTree_s *root);
 
 #endif
