@@ -1,13 +1,12 @@
 /*
- * Solutions-to-CLRS/Chapter15-Dynamic-Programming/cut_rod.cpp
+ * Solutions-to-CLRS/Chapter15-Dynamic-Programming/ut_rod.cpp
  *
- * Copyrigh(c) 2016  Jiawei Feng
+ * Copyright (c) 2016  Jiawei Feng
  */
 
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-
 
 /*
  * Create a price table.
@@ -16,54 +15,61 @@ static inline void CreatePriceTable(unsigned price[], const unsigned size)
 {
         price[0] = 1;
         for (unsigned i = 1; i != size; ++i) {
-                price[i] = price[i - 1] + rand() % 7;
+                price[i] = price[i - 1] + rand() % 7 + 2;
         }
 }
 
 unsigned SimpleCutRod(const unsigned length, const unsigned price[]);
 unsigned MemoizedCutRod(const unsigned length, const unsigned price[]);
 unsigned MemoizedCutRodAux(const unsigned length, const unsigned price[], int memo[]);
-unsigned BottomupCutRod(const unsigned length, const unsigned price[]);
+unsigned BottomUpCutRod(const unsigned length, const unsigned price[], unsigned solution[]);
 
 
 int main()
 {
+        std::cout << "How long is the rod you will cut?\n";
         unsigned length;
-        std::cout << "How long is the rod you will cut?" << std::endl;
         std::cin >> length;
 
         unsigned price[length];
         CreatePriceTable(price, length);
 
-        std::cout << "Price Table\n";
+        std::cout << "Price Table: ";
         for (unsigned i : price) {
                 std::cout << i << ' ';
         }
         std::cout << std::endl;
 
-        unsigned revenue;
         decltype(std::clock()) start, stop;
+        unsigned revenue;
 
-        std::cout << "Simple cut rod:\n";
+        // Simple cut rod
         start = std::clock();
         revenue = SimpleCutRod(length, price);
         stop = std::clock();
         std::cout << "Revenue: " << revenue << '\n';
         std::cout << "Time consuming: " << stop - start << "ms" << std::endl;
 
-        std::cout << "Memoized cut rod:\n";
+        // Memoized cut rod
         start = std::clock();
         revenue = MemoizedCutRod(length, price);
         stop = std::clock();
         std::cout << "Revenue: " << revenue << '\n';
         std::cout << "Time consuming: " << stop - start << "ms" << std::endl;
 
-        std::cout << "Buottom-up cut rod:\n";
+        // Bottom-up cut rod
+        unsigned solution[length + 1]; // cutting solution
         start = std::clock();
-        revenue = BottomupCutRod(length, price);
+        revenue = BottomUpCutRod(length, price, solution);
         stop = std::clock();
         std::cout << "Revenue: " << revenue << '\n';
         std::cout << "Time consuming: " << stop - start << "ms" << std::endl;
+        std::cout << "Solution: ";
+        while (length) {
+                std::cout << solution[length] << ' ';
+                length -= solution[length];
+        }
+        std::cout << std::endl;
 
         return 0;
 }
@@ -91,6 +97,7 @@ unsigned SimpleCutRod(const unsigned length, const unsigned price[])
  */
 unsigned MemoizedCutRod(const unsigned length, const unsigned price[])
 {
+        // Initialize memo array
         int memo[length + 1];
         for (int &i : memo) {
                 i = -1;
@@ -118,16 +125,25 @@ unsigned MemoizedCutRodAux(const unsigned length, const unsigned price[], int me
 /*
  * Bottom-up cut-rod algorithm.
  */
-unsigned BottomupCutRod(const unsigned length, const unsigned price[])
+unsigned BottomUpCutRod(const unsigned length, const unsigned price[], unsigned solution[])
 {
+        /*
+        for (unsigned i = 0; i != length + 1; ++i) {
+                solution[i] = 0;
+        }
+        */
+
         unsigned memo[length + 1];
         memo[0] = 0;
 
         for (unsigned i = 1; i != length + 1; ++i) {
                 unsigned revenue = 0;
-                for (unsigned j = 0; j !=i; ++j) {
+                for (unsigned j = 0; j != i; ++j) {
                         unsigned temp = price[j] + memo[i - j - 1];
-                        revenue = revenue > temp ? revenue : temp;
+                        if (temp > revenue) {
+                                revenue = temp;
+                                solution[i] = j + 1;
+                        }
                 }
                 memo[i] = revenue;
         }
