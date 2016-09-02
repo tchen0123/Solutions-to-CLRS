@@ -1,11 +1,11 @@
-#include "merge_sort.h"
+#include "inversion.h"
 
+static std::size_t inversionNum = 0;
 
-static inline void merge(std::vector<int> &array, std::size_t low, std::size_t high, std::size_t mid)
+static void merge(std::vector<int> &array, std::size_t low, std::size_t high, std::size_t mid)
 {
         std::size_t lSize = mid - low + 1, rSize = high - mid;
         int lArray[lSize], rArray[rSize];
-
         for (std::size_t i = 0; i != lSize; ++i) {
                 lArray[i] = array[low + i];
         }
@@ -15,21 +15,23 @@ static inline void merge(std::vector<int> &array, std::size_t low, std::size_t h
 
         for (std::size_t i = 0, j = 0, k = low;
              k <= high; ++k) {
-                if (j == rSize || (i < lSize && lArray[i] <= rArray[j])) {
+                if (j >= rSize || (i < lSize && lArray[i] <= rArray[j])) {
                         array[k] = lArray[i++];
                 }
                 else {
                         array[k] = rArray[j++];
+                        inversionNum += lSize - i;
                 }
         }
 }
 
-void mergeSort(std::vector<int> &array, std::size_t low, std::size_t high)
+int inversion(std::vector<int> &array, std::size_t low, std::size_t high)
 {
         if (low < high) {
                 std::size_t mid = (low + high) / 2;
-                mergeSort(array, low, mid);
-                mergeSort(array, mid + 1, high);
+                inversion(array, low, mid);
+                inversion(array, mid + 1, high);
                 merge(array, low, high, mid);
         }
+        return inversionNum;
 }
