@@ -1,12 +1,8 @@
-/*
- * Solutions-to-CLRS/Chapter02-Getting-Started/binary_sum.h
- *
- * Copyright (c) 2016  Jiawei Feng
- */
+#ifndef BINARY_SUM_H
+#define BINARY_SUM_Y
 
-#ifndef __BINARY_SUM_H_
-#define __BINARY_SUM_H_
+#include <vector>
 
-void BinarySum(const int A[], const int B[], const int size, int sum[]);
+void binarySum(std::vector<unsigned> &A, std::vector<unsigned> &B, std::vector<unsigned> &C);
 
 #endif
