@@ -1,12 +1,10 @@
-/*
- * Solutions-to-CLRS/Chapter02-Getting-Started/merge_sort.h
- *
- * Copyright (c) 2016  Jiawei Feng
- */
+#ifndef MERGE_SORT_H
+#define MERGE_SORT_H
 
-#ifndef __MERGE_SORT_H_
-#define __MERGE_SORT_H_
+#include <vector>
 
-void MergeSort(int array[], const int low, const int high);
+
+void mergeSort(std::vector<int> &array, std::size_t low, std::size_t high);
+
 
 #endif
