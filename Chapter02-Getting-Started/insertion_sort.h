@@ -1,12 +1,9 @@
-/*
- * Solutions-to-CLRS/Chapter02-Getting-Started/insertion_sort.h
- *
- * Copyright (c) 2016  Jiawei Feng
- */
+#ifndef INSERTION_SORT_H
+#define INSERTION_SORT_H
 
-#ifndef __INSERTION_SORT_H_
-#define __INSERTION_SORT_H_
+#include <vector>
 
-void InsertionSort(int array[], const int size);
+
+void insertionSort(std::vector<int> &array);
 
 #endif
