@@ -1,20 +1,19 @@
-/*
- * Solutions-to-CLRS/Chapter04-Divide-and-Conquer/max_subarray.h
- *
- * Copyright (c) 2016  Jiawei Feng
- */
+#ifndef MAX_SUBARRAY_H
+#define MAX_SUBARRAY_H
 
-#ifndef __MAX_SUBARRAY_H_
-#define __MAX_SUBARRAY_H_
+#include <vector>
 
-// max subarray structure */
-struct maxSubarray_s {
-        int low;
-        int high;
+
+class Max {
+public:
+        Max(int l, int h, int s) : low(l), high(h), sum(s) { }
+        Max() = default;
+        int low, high;
         int sum;
 };
 
-struct maxSubarray_s MaxSubarray(int array[], int size);
-struct maxSubarray_s FindMaxSubarray(int array[], int low, int high);
+Max findMaxSubarray(std::vector<int> &array, int low, int high);
+Max maxSubarray(std::vector<int> &array);
+
 
 #endif
