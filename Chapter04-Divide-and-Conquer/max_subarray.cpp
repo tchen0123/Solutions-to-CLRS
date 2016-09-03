@@ -1,6 +1,5 @@
 #include "max_subarray.h"
 
-
 Max findMaxCrossingSubarray(std::vector<int> &array, int low, int mid, int high)
 {
         int left = mid;
