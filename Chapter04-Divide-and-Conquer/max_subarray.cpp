@@ -56,7 +56,7 @@ Max findMaxSubarray(std::vector<int> &array, int low, int high)
         }
 }
 
-
+//非遞歸算法
 Max maxSubarray(std::vector<int> &array)
 {
         Max ret(0, 0, 0);
