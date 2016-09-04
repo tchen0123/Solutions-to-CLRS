@@ -1,12 +1,8 @@
-/*
- * Solutions-to-CLRS/Chapter07-Quicksort/quicksort.h
- *
- * Copyright (C) 2016  Jiawei Feng
- */
+#ifndef QUICKSORT_H
+#define QUICKSORT_H
 
-#ifndef __QUICKSORT_H_
-#define __QUICKSORT_H_
+#include <vector>
 
-void QuickSort(int array[], int low, int high);
+void quickSort(std::vector<int> &array, std::size_t low, std::size_t high);
 
 #endif
