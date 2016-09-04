@@ -1,12 +1,8 @@
-/*
- * Solutions-to-CLRS/Chapter08-Sorting-in-Linear-Time/bucket_sort.h
- *
- * Copyright (c) 2016  Jiawei Feng
- */
+#ifndef BUCKET_SORT_H
+#define BUCKET_SORT_H
 
-#ifndef __BUCKET_SORT_H_
-#define __BUCKET_SORT_H_
+#include <vector>
 
-void BucketSort(int array[], const int arraySize);
+void bucketSort(std::vector<int> &array);
 
 #endif
