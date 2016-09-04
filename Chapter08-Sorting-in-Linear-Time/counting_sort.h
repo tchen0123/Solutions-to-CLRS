@@ -1,12 +1,8 @@
-/*
- * Solutions-to-CLRS/Chapter08-Sorting-in-Linear-Time/counting_sort.h
- *
- * Copyright (c) 2016  Jiawei Feng
- */
+#ifndef COUNTING_SORT_H
+#define COUNTING_SORT_H
 
-#ifndef __COUNTING_SORT_H_
-#define __COUNTING_SORT_H_
+#include <vector>
 
-void CountingSort(const int array[], int result[], const int arraySize);
+void countingSort(std::vector<int> &src, std::vector<int> &dest);
 
 #endif
