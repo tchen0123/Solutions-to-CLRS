@@ -1,12 +1,8 @@
-/*
- * Solutions-to-CLRS/Chapter09-Medians-and-Order-Statistics/select.h
- *
- * Copyright (c) 2016  Jiawei Feng
- */
+#ifndef SELECT_H
+#define SELECT_H
 
-#ifndef __SELECT_H_
-#define __SELECT_H_
+#include <vector>
 
-int Select(int array[], int head, int tail, int k);
+int select(std::vector<int> array, std::size_t low, std::size_t high, std::size_t K);
 
 #endif
