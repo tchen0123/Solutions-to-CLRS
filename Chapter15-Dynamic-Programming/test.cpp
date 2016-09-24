@@ -1,7 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <string>
 #include "cut_rod.h"
+#include "LCS.h"
 
 void createPriceTable(std::vector<int> &price)
 {
@@ -14,23 +16,18 @@ void createPriceTable(std::vector<int> &price)
         }
 }
 
-void printSolution(std::vector<int> &solution, int len)
-{
-        while (len){
-                std::cout << solution[len] << " ";
-                len -= solution[len];
-        }
-}
 
 int main()
 {
         std::vector<int> price;
         createPriceTable(price);
 
-        std::vector<int> solution;
-        std::size_t len;
-        std::cin >> len;
-        std::cout << bottomUpCutRod(price, len, solution) << std::endl;
-        printSolution(solution, len);
+        std::string A, B;
+        std::cin >> A >> B;
+        std::cout << A << '\n';
+        std::cout << B << std::endl;
+        std::vector<std::vector<int>> result;
+        std::cout << LCS_Length(A, B, result) << std::endl;
+        printLCS(A, A.size(), B.size(), result);
         std::cout << std::endl;
 }

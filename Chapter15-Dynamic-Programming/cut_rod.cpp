@@ -1,4 +1,5 @@
 #include "cut_rod.h"
+#include <iostream>
 
 static int memoizedCutRodAux(std::vector<int> &price, std::size_t len,
                              std::vector<int> &memo)
@@ -54,4 +55,12 @@ int bottomUpCutRod(std::vector<int> &price, std::size_t len, std::vector<int> &s
                 memo[i] = max;
         }
         return memo[len];
+}
+
+void printSolution(std::vector<int> &solution, int len)
+{
+        while (len){
+                std::cout << solution[len] << " ";
+                len -= solution[len];
+        }
 }

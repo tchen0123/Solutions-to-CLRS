@@ -6,5 +6,6 @@
 int cutRod(std::vector<int> &price, std::size_t len);
 int memoizedCutRod(std::vector<int> &price, std::size_t len);
 int bottomUpCutRod(std::vector<int> &price, std::size_t len, std::vector<int> &solution);
+void printSolution(std::vector<int> &solution, int len);
 
 #endif
