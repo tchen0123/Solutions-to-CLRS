@@ -3,9 +3,8 @@
 
 #include <vector>
 
-
-int cutRod(std::vector<int> &price, std::size_t length);
-int memoizedCutRod(std::vector<int> &price, std::size_t length);
-int bottomUpcutRod(std::vector<int> &price, std::size_t length, std::vector<int> &solution);
+int cutRod(std::vector<int> &price, std::size_t len);
+int memoizedCutRod(std::vector<int> &price, std::size_t len);
+int bottomUpCutRod(std::vector<int> &price, std::size_t len, std::vector<int> &solution);
 
 #endif
