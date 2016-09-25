@@ -1,31 +1,33 @@
 /*
- * 最長迴文子序列
+ * Longest palindrome
  */
 #include "palindrome.h"
+#include <vector>
 
-
-int longestPalindrome(std::string &str, std::vector<std::vector<int>> &result)
+int palindrome(std::string &str)
 {
-        result.resize(str.size() + 1);
-        for (auto &i : result) {
-                i.resize(str.size() + 1, 0);
+        std::vector<std::vector<int>> count;
+        count.resize(str.size() + 1); // 這裏大小爲str.size() + 1的原因是，
+                                      // 當low = str.size() - 1時，count[low + 1]即count[str.size()]。
+        for (auto &i : count) {
+                i.resize(str.size(), 0);
         }
 
-        for (std::size_t low = str.size(); low != 0; --low) {
-                for (std::size_t high = 1; high <= str.size(); ++high) {
+        for (int low = str.size() - 1; low >= 0; --low) {
+                for (int high = 0; high < static_cast<int>(str.size()); ++high) {
                         if (low == high) {
-                                result[low][high] = 1;
+                                count[low][high] = 1;
                         }
                         else if (low > high) {
-                                result[low][high] = 0;
+                                count[low][high] = 0;
                         }
-                        else if (str[low - 1] == str[high - 1]) {
-                                result[low][high] = result[low + 1][high - 1] + 2;
+                        else if (str[low] == str[high]) {
+                                count[low][high] = count[low + 1][high - 1] + 2;
                         }
                         else {
-                                result[low][high] = std::max(result[low + 1][high], result[low][high - 1]);
+                                count[low][high] = std::max(count[low + 1][high], count[low][high - 1]);
                         }
                 }
         }
-        return result[1][str.size()];
+        return count[0][str.size() - 1];
 }
