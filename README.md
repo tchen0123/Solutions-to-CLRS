@@ -1,2 +1,2 @@
 # Solutions-to-CLRS
-Partcial solutions to CLRS. Using C++ 11.
+Partial solutions to CLRS. Using C++ 11.
